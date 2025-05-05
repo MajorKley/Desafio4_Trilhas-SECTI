@@ -1,0 +1,463 @@
+.btn {
+  padding: 12px 32px;
+  border-radius: var(--border-radius-lg);
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  border: none;
+  display: inline-block;
+  text-decoration: none;
+  text-align: center;
+  transition: opacity 0.3s ease;
+}
+
+.btn:hover {
+  opacity: 0.9;
+}
+
+.btn-primary {
+  background-color: var(--color-accent);
+  color: var(--color-white);
+}
+
+.btn-secondary {
+  background-color: var(--color-secondary);
+  color: var(--color-text);
+}
+
+.btn-submit {
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  width: 100%;
+}
+
+.btn-login {
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  width: 100%;
+  font-size: 16px;
+}
+
+.btn-register {
+  background-color: var(--color-accent);
+  color: var(--color-white);
+  width: 100%;
+  font-size: 16px;
+}
+
+/* Estilo do botão de login no menu */
+#login-link,
+#logout-link {
+  background-color: var(--color-primary);
+  color: var(--color-white) !important;
+  padding: 8px 15px;
+  border-radius: var(--border-radius-sm);
+  text-decoration: none;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+  display: inline-block;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 200px;
+}
+
+#login-link:hover,
+#logout-link:hover {
+  background-color: var(--color-primary-dark);
+  text-decoration: none !important;
+}
+
+.form-container {
+  background-color: var(--color-white);
+  padding: 30px;
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--shadow-md);
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--color-gray);
+  border-radius: var(--border-radius-sm);
+  font-size: 16px;
+  font-family: Arial, Helvetica, sans-serif; /* Mesma fonte do resto do site */
+}
+
+.form-help {
+  font-size: 14px;
+  color: var(--color-gray-dark);
+  margin-top: 5px;
+  margin-bottom: 0;
+}
+
+.form-options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.remember-me,
+.terms {
+  display: flex;
+  align-items: center;
+}
+
+.remember-me input,
+.terms input {
+  margin-right: 8px;
+}
+
+.forgot-password {
+  color: var(--color-accent);
+  text-decoration: none;
+}
+
+.forgot-password:hover {
+  text-decoration: underline;
+}
+
+/* Cards de denúncias */
+.denuncia-card {
+  border-radius: var(--border-radius-md);
+  padding: 15px 20px;
+  margin-bottom: 15px;
+  box-shadow: var(--shadow-sm);
+}
+
+.denuncia-card.pendente {
+  background-color: #fadadd;
+  border-left: 4px solid var(--color-accent);
+}
+
+.denuncia-card.resolvida {
+  background-color: #e0f0e3;
+  border-left: 4px solid var(--color-primary);
+}
+
+.card-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 15px;
+}
+
+.card-info {
+  flex: 1;
+}
+
+.local-nome {
+  color: var(--color-accent);
+  font-size: 18px;
+  margin-bottom: 5px;
+}
+
+.tipo-denuncia {
+  color: var(--color-text-light);
+  font-size: 14px;
+  margin-bottom: 5px;
+  font-weight: 500;
+}
+
+.denuncia-card.resolvida .local-nome {
+  color: var(--color-primary);
+}
+
+.data-hora {
+  color: var(--color-text-light);
+  font-size: 14px;
+  margin-bottom: 0;
+}
+
+.card-status {
+  display: flex;
+  align-items: center;
+  margin-left: 10px;
+}
+
+.status-indicator {
+  color: var(--color-accent);
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  font-weight: bold;
+  padding: 4px 8px;
+  border-radius: var(--border-radius-sm);
+  background-color: rgba(217, 60, 74, 0.1);
+  cursor: pointer;
+}
+
+.status-indicator.resolvido {
+  color: var(--color-primary);
+  background-color: rgba(20, 89, 42, 0.1);
+}
+
+.status-indicator svg {
+  margin-right: 5px;
+}
+
+.card-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.btn-denunciar,
+.btn-visualizar {
+  padding: 8px 20px;
+  border-radius: var(--border-radius-lg);
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  border: none;
+}
+
+.btn-denunciar {
+  background-color: var(--color-accent);
+  color: var(--color-white);
+}
+
+.btn-visualizar {
+  background-color: var(--color-secondary);
+  color: var(--color-text);
+}
+
+.btn-denunciar:hover,
+.btn-visualizar:hover {
+  opacity: 0.9;
+}
+
+.sem-denuncias {
+  text-align: center;
+  color: var(--color-gray-dark);
+  padding: 20px;
+  background-color: var(--color-gray-light);
+  border-radius: var(--border-radius-md);
+  margin: 20px 0;
+  font-size: 16px;
+}
+
+.form-tabs {
+  display: flex;
+  margin-bottom: 30px;
+  border-bottom: 2px solid var(--color-gray);
+}
+
+.form-tabs button {
+  flex: 1;
+  background: none;
+  border: none;
+  padding: 15px;
+  font-size: 18px;
+  font-weight: bold;
+  color: var(--color-gray-dark);
+  cursor: pointer;
+}
+
+.form-tabs button.active {
+  color: var(--color-primary);
+  border-bottom: 3px solid var(--color-primary);
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  overflow: auto;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.modal-content {
+  position: relative;
+  background-color: var(--color-white);
+  margin: 10% auto;
+  width: 90%;
+  max-width: 600px;
+  border-radius: var(--border-radius-md);
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+  animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(-50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.modal-header {
+  padding: 20px;
+  border-bottom: 1px solid var(--color-gray);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-header h2 {
+  margin: 0;
+  color: var(--color-primary);
+  font-size: 24px;
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  font-size: 28px;
+  font-weight: bold;
+  color: var(--color-gray-dark);
+  cursor: pointer;
+}
+
+.modal-body {
+  padding: 20px;
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+.modal-footer {
+  padding: 15px 20px;
+  border-top: 1px solid var(--color-gray);
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.denuncia-info {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.info-row {
+  display: flex;
+  gap: 10px;
+}
+
+.info-row.full {
+  flex-direction: column;
+  gap: 5px;
+}
+
+.info-label {
+  font-weight: bold;
+  color: var(--color-text-light);
+  min-width: 80px;
+}
+
+.info-value {
+  flex: 1;
+}
+
+.info-value.descricao {
+  background-color: #f9f9f9;
+  padding: 15px;
+  border-radius: var(--border-radius-sm);
+  border-left: 3px solid var(--color-primary);
+  white-space: pre-wrap;
+}
+
+.foto-container img {
+  max-width: 100%;
+  border-radius: var(--border-radius-sm);
+  box-shadow: var(--shadow-sm);
+}
+
+@media (max-width: 600px) {
+  .card-content {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .card-status {
+    margin-top: 10px;
+    margin-left: 0;
+  }
+
+  .card-actions {
+    width: 100%;
+  }
+
+  .btn-denunciar,
+  .btn-visualizar {
+    flex: 1;
+    text-align: center;
+  }
+
+  .form-options {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .forgot-password {
+    margin-top: 5px;
+  }
+
+  .modal-content {
+    margin: 5% auto;
+    width: 95%;
+  }
+
+  .info-row {
+    flex-direction: column;
+    gap: 5px;
+  }
+}
+
+@media (max-width: 480px) {
+  #login-link,
+  #logout-link {
+    padding: 6px 10px;
+    font-size: 13px;
+    max-width: 120px;
+  }
+
+  .menu li {
+    margin-left: 12px;
+  }
+
+  .modal-header h2 {
+    font-size: 20px;
+  }
+
+  .modal-body {
+    padding: 15px;
+  }
+
+  .modal-footer {
+    padding: 10px 15px;
+  }
+}

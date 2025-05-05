@@ -1,0 +1,175 @@
+.acompanhar-page {
+  background-color: #d9d9d9;
+  min-height: calc(100vh - 72px);
+  padding: 20px 0;
+}
+
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.page-title {
+  color: #14592a;
+  font-size: 28px;
+  margin-bottom: 5px;
+}
+
+.page-subtitle {
+  color: #464746;
+  font-size: 14px;
+  margin-bottom: 20px;
+}
+
+.section-title {
+  color: #14592a;
+  font-size: 24px;
+  margin: 30px 0 5px 0;
+}
+
+.section-subtitle {
+  color: #464746;
+  font-size: 14px;
+  margin-bottom: 20px;
+}
+
+/* Cards */
+.denuncia-card {
+  border-radius: 10px;
+  padding: 15px 20px;
+  margin-bottom: 15px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.denuncia-card.pendente {
+  background-color: #fadadd;
+  border-left: 4px solid #d93c4a;
+}
+
+.denuncia-card.resolvida {
+  background-color: #e0f0e3;
+  border-left: 4px solid #14592a;
+}
+
+.card-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 15px;
+}
+
+.card-info {
+  flex: 1;
+}
+
+.local-nome {
+  color: #d93c4a;
+  font-size: 18px;
+  margin-bottom: 5px;
+}
+
+.tipo-denuncia {
+  color: #464746;
+  font-size: 14px;
+  margin-bottom: 5px;
+  font-weight: 500;
+}
+
+.denuncia-card.resolvida .local-nome {
+  color: #14592a;
+}
+
+.data-hora {
+  color: #464746;
+  font-size: 14px;
+  margin-bottom: 0;
+}
+
+.card-status {
+  display: flex;
+  align-items: center;
+  margin-left: 10px;
+}
+
+.status-indicator {
+  color: #d93c4a;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  font-weight: bold;
+  padding: 4px 8px;
+  border-radius: 4px;
+  background-color: rgba(217, 60, 74, 0.1);
+}
+
+.status-indicator.resolvido {
+  color: #14592a;
+  background-color: rgba(20, 89, 42, 0.1);
+}
+
+.status-indicator svg {
+  margin-right: 5px;
+}
+
+.card-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.btn-denunciar,
+.btn-visualizar {
+  padding: 8px 20px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  border: none;
+}
+
+.btn-denunciar {
+  background-color: #d93c4a;
+  color: white;
+}
+
+.btn-visualizar {
+  background-color: #c0b40a;
+  color: #1e1e1e;
+}
+
+.btn-denunciar:hover,
+.btn-visualizar:hover {
+  opacity: 0.9;
+}
+
+.sem-denuncias {
+  text-align: center;
+  color: #666;
+  padding: 20px;
+  background-color: #f5f5f5;
+  border-radius: 10px;
+  margin: 20px 0;
+  font-size: 16px;
+}
+
+@media (max-width: 600px) {
+  .card-content {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .card-status {
+    margin-top: 10px;
+    margin-left: 0;
+  }
+
+  .card-actions {
+    width: 100%;
+  }
+
+  .btn-denunciar,
+  .btn-visualizar {
+    flex: 1;
+    text-align: center;
+  }
+}

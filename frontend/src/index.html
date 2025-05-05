@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EcoDenúncia - Por uma cidade mais limpa e consciente</title>
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages/home.css">
+</head>
+
+<body>
+  <header>
+    <div class="logo">
+      <a href="home.html">
+        <img src="assets/logo.png" alt="EcoDenúncia Logo">
+      </a>
+    </div>
+
+    <nav class="menu">
+      <ul>
+        <li><a href="home.html" class="active">HOME</a></li>
+        <li><a href="#">SOBRE NÓS</a></li>
+        <li><a href="#">PONTOS VICIADOS</a></li>
+        <li><a href="#">CUIDE DO LIXO</a></li>
+        <li id="user-status">
+          <a href="pages/login.html" id="login-link">LOGIN</a>
+          <a href="#" id="logout-link" style="display: none;" onclick="logout(); return false;">LOGOUT</a>
+        </li>
+      </ul>
+    </nav>
+
+    <button class="menu-button" onclick="toggleMenu()">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </header>
+
+  <main class="home-page">
+    <div class="container">
+      <div class="content">
+        <h1>Denuncie,</h1>
+        <h2>e crie uma cidade mais limpa!</h2>
+        <p>Com uma foto e um pouco do seu tempo você pode fazer a diferença.</p>
+
+        <div class="buttons">
+          <a href="pages/denuncia.html" class="btn btn-primary" onclick="return checkLoginBeforeRedirect(event)">Denunciar</a>
+          <a href="pages/acompanhar.html" class="btn btn-secondary" onclick="return checkLoginBeforeRedirect(event)">Acompanhar</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="illustration">
+      <img src="assets/identidadeVisual.png" alt="Ilustração de pessoas reciclando">
+    </div>
+
+    <div class="cloud cloud-1"></div>
+    <div class="cloud cloud-2"></div>
+  </main>
+
+  <script src="js/main.js"></script>
+</body>
+
+</html>

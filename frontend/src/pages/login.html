@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - EcoDenúncia</title>
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/pages/login.css">
+</head>
+
+<body>
+  <header>
+    <div class="logo">
+      <a href="../index.html">
+        <img src="../assets/logo.png" alt="EcoDenúncia Logo">
+      </a>
+    </div>
+
+    <nav class="menu">
+      <ul>
+        <li><a href="../index.html">HOME</a></li>
+        <li><a href="#">SOBRE NÓS</a></li>
+        <li><a href="#">PONTOS VICIADOS</a></li>
+        <li><a href="#">CUIDE DO LIXO</a></li>
+        <li id="user-status">
+          <a href="login.html" id="login-link" class="active">LOGIN</a>
+          <a href="#" id="logout-link" style="display: none;" onclick="logout(); return false;">LOGOUT</a>
+        </li>
+      </ul>
+    </nav>
+
+    <button class="menu-button" onclick="toggleMenu()">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </header>
+
+  <main class="login-page">
+    <div class="login-container">
+      <div class="logo-container">
+        <img src="../assets/logo.png" alt="EcoDenúncia Logo" class="login-logo">
+      </div>
+
+      <div class="form-tabs">
+        <button id="login-tab" class="active">Entrar</button>
+        <button id="register-tab">Cadastrar</button>
+      </div>
+
+      <!-- formulário de login -->
+      <form id="login-form" class="form-active">
+        <h2>Bem-vindo de volta!</h2>
+        <p class="form-subtitle">Entre com seus dados para continuar</p>
+
+        <div class="form-group">
+          <label for="login-email">E-mail</label>
+          <input type="email" id="login-email" required>
+        </div>
+
+        <div class="form-group">
+          <label for="login-password">Senha</label>
+          <input type="password" id="login-password" required>
+        </div>
+
+        <div class="form-options">
+          <div class="remember-me">
+            <input type="checkbox" id="remember">
+            <label for="remember">Lembrar-me</label>
+          </div>
+          <a href="#" class="forgot-password">Esqueceu a senha?</a>
+        </div>
+
+        <button type="submit" class="btn btn-login">Entrar</button>
+
+        <p class="switch-form">
+          Não tem uma conta? <a href="#" id="switch-to-register">Cadastre-se</a>
+        </p>
+      </form>
+
+      <!-- formulário de cadastro -->
+      <form id="register-form" style="display: none;">
+        <h2>Crie sua conta</h2>
+        <p class="form-subtitle">Junte-se a nós para uma cidade mais limpa</p>
+
+        <div class="form-group">
+          <label for="register-email">E-mail</label>
+          <input type="email" id="register-email" required>
+        </div>
+
+        <div class="form-group">
+          <label for="register-password">Senha</label>
+          <input type="password" id="register-password" required>
+        </div>
+
+        <div class="form-group">
+          <label for="register-confirm-password">Confirmar senha</label>
+          <input type="password" id="register-confirm-password" required>
+        </div>
+
+        <div class="form-options">
+          <div class="terms">
+            <input type="checkbox" id="terms" required>
+            <label for="terms">Concordo com os <a href="#">Termos de Uso</a> e <a href="#">Política de Privacidade</a></label>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-register" id="btn-register">Cadastrar</button>
+
+        <p class="switch-form">
+          Já tem uma conta? <a href="#" id="switch-to-login">Faça login</a>
+        </p>
+      </form>
+    </div>
+  </main>
+
+  <script src="../js/main.js"></script>
+</body>
+
+</html>

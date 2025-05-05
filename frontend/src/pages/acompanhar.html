@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Acompanhar Denúncias - EcoDenúncia</title>
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/pages/acompanhar.css">
+</head>
+
+<body>
+  <header>
+    <div class="logo">
+      <a href="../index.html">
+        <img src="../assets/logo.png" alt="EcoDenúncia Logo">
+      </a>
+    </div>
+
+    <nav class="menu">
+      <ul>
+        <li><a href="../index.html">HOME</a></li>
+        <li><a href="#">SOBRE NÓS</a></li>
+        <li><a href="#">PONTOS VICIADOS</a></li>
+        <li><a href="#">CUIDE DO LIXO</a></li>
+        <li id="user-status">
+          <a href="login.html" id="login-link">LOGIN</a>
+          <a href="#" id="logout-link" style="display: none;" onclick="logout(); return false;">LOGOUT</a>
+        </li>
+      </ul>
+    </nav>
+
+    <button class="menu-button" onclick="toggleMenu()">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </header>
+
+  <main class="acompanhar-page">
+    <div class="container">
+      <h1 class="page-title">Histórico de Denúncias</h1>
+
+      <div class="denuncias-pendentes">
+
+      </div>
+
+      <h2 class="section-title">Denúncias Resolvidas</h2>
+      <p class="section-subtitle">Aperte na palavra "Resolvido" para que a denúncia retorne à seção "Pendente"</p>
+
+      <div class="denuncias-resolvidas">
+      </div>
+    </div>
+  </main>
+
+  <!-- modal de visualização de denúncia -->
+  <div id="denuncia-modal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="modal-titulo">Detalhes da Denúncia</h2>
+        <button class="modal-close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="denuncia-info">
+          <div class="info-row">
+            <div class="info-label">Tipo:</div>
+            <div id="modal-tipo" class="info-value">Carregando...</div>
+          </div>
+          <div class="info-row">
+            <div class="info-label">Local:</div>
+            <div id="modal-endereco" class="info-value">Carregando...</div>
+          </div>
+          <div class="info-row">
+            <div class="info-label">Cidade:</div>
+            <div id="modal-cidade" class="info-value">Carregando...</div>
+          </div>
+          <div class="info-row">
+            <div class="info-label">Status:</div>
+            <div id="modal-status" class="info-value">Carregando...</div>
+          </div>
+          <div class="info-row">
+            <div class="info-label">Data:</div>
+            <div id="modal-data" class="info-value">Carregando...</div>
+          </div>
+          <div class="info-row full">
+            <div class="info-label">Descrição:</div>
+            <div id="modal-descricao" class="info-value descricao">Carregando...</div>
+          </div>
+          <div id="modal-foto-container" class="info-row full foto-container" style="display: none;">
+            <div class="info-label">Foto:</div>
+            <div class="info-value">
+              <img id="modal-foto" src="/placeholder.svg" alt="Foto da denúncia">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button id="modal-alternar-status" class="btn btn-primary">Alterar Status</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="../js/main.js"></script>
+  <script src="../js/acompanhar.js"></script>
+</body>
+
+</html>
