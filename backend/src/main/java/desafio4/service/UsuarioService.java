@@ -7,9 +7,11 @@ import desafio4.model.entity.Denuncia;
 import desafio4.model.entity.Usuario;
 import desafio4.model.repo.UsuarioRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,11 +22,12 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
-public class UsuarioService {
+public class UsuarioService implements UserDetailsService {
     @Autowired
     UsuarioRepo repo;
 
     @Autowired
+    @Lazy
     DenunciaService denunciaService;
 
     public boolean efetuarLogin(String login, String senha) {
