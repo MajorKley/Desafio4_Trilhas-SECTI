@@ -1,5 +1,6 @@
 package desafio4.model.entity.DTOs;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.Email;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -34,6 +35,7 @@ public class UsuarioDTO implements UserDetails {
         this.getAuthorities = authorities;
     }
 
+    @JsonIgnore
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return getAuthorities;

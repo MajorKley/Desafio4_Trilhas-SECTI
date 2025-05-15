@@ -136,12 +136,12 @@ public class UsuarioService {
     //UserDetailsService
 
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        Optional<Usuario> egresso = repo.findByEmail(email);
-        if (!egresso.isPresent()) {
+        Optional<Usuario> usuario = repo.findByEmail(email);
+        if (!usuario.isPresent()) {
             throw new UsernameNotFoundException(email);
         }
 
-        Usuario recuperado = egresso.get();
+        Usuario recuperado = usuario.get();
 
         List<SimpleGrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority("ROLE_USUARIO"));
