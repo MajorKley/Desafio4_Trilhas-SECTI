@@ -25,20 +25,19 @@ public class UsuarioDTO implements UserDetails {
     private String email;
     private String senha;
     private String descricao;
-    private Collection<? extends GrantedAuthority> getAuthorities;
+    private Collection<? extends GrantedAuthority> authorities;
 
     public UsuarioDTO(UUID id, String login, String senha, List<SimpleGrantedAuthority> authorities) {
         this.id = id;
         this.email = login;
-        this.nome = login;
         this.senha = senha;
-        this.getAuthorities = authorities;
+        this.authorities = authorities;
     }
 
     @JsonIgnore
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return getAuthorities;
+        return authorities;
     }
 
     @Override
