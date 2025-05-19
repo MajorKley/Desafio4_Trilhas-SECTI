@@ -4,6 +4,7 @@ import desafio4.exception.BuscaVaziaRunTime;
 import desafio4.exception.RegraNegocioRunTime;
 import desafio4.model.entity.DTOs.DenunciaDTO;
 import desafio4.model.entity.Denuncia;
+import desafio4.model.entity.ENUMs.Status;
 import desafio4.service.DenunciaService;
 import desafio4.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -34,7 +36,8 @@ public class DenunciaController {
                 .latitude(request.getLatitude())
                 .longitude(request.getLongitude())
                 .anonimo(request.isAnonimo())
-                .data(request.getData())
+                .status(Status.ENVIADO)
+                .data(LocalDate.now())
                 .build();
         try {
             Denuncia salvo = denunciaService.salvar(denuncia);

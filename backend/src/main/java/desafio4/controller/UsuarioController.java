@@ -5,7 +5,7 @@ import desafio4.exception.RegraNegocioRunTime;
 import desafio4.model.entity.DTOs.DenunciaDTO;
 import desafio4.model.entity.DTOs.UsuarioDTO;
 import desafio4.model.entity.Denuncia;
-import desafio4.model.entity.Fotos;
+import desafio4.model.entity.ENUMs.Status;
 import desafio4.model.entity.Usuario;
 import desafio4.service.UsuarioService;
 import jakarta.validation.Valid;
@@ -16,6 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -46,11 +47,7 @@ public class UsuarioController {
     }
 
     @PutMapping(value = "{id}")
-    public ResponseEntity atualizar(
-            @PathVariable UUID id,
-            @RequestParam("nome") String nome,
-            @RequestParam("email") String email,
-            @RequestParam("senha") String senha) {
+    public ResponseEntity atualizar(@PathVariable UUID id, @RequestBody @Valid UsuarioDTO request) {
         try {
             // Recupera o usuario existente do banco de dados
             Optional<Usuario> usuarioExistenteOptional = usuarioService.buscarPorId(id);
@@ -61,14 +58,14 @@ public class UsuarioController {
             }
 
             // Atualiza os campos passados no DTO
-            if (nome != null && !nome.trim().isEmpty()) {
-                usuarioExistente.setNome(nome);
+            if (request.getNome() != null && !request.getNome().trim().isEmpty()) {
+                usuarioExistente.setNome(request.getNome());
             }
-            if (email != null && !email.trim().isEmpty()) {
-                usuarioExistente.setEmail(email);
+            if (request.getEmail() != null && !request.getEmail().trim().isEmpty()) {
+                usuarioExistente.setEmail(request.getEmail());
             }
-            if (senha != null && !senha.trim().isEmpty()) {
-                usuarioExistente.setSenha(passwordEncoder.encode(senha));
+            if (request.getSenha() != null && !request.getSenha().trim().isEmpty()) {
+                usuarioExistente.setSenha(passwordEncoder.encode(request.getSenha()));
             }
             // Atualiza o usuario no banco de dados
             Usuario atualizado = usuarioService.atualizar(usuarioExistente);
@@ -109,7 +106,9 @@ public class UsuarioController {
                 .descricao(request.getDescricao())
                 .latitude(request.getLatitude())
                 .longitude(request.getLongitude())
-                .fotos((Fotos) request.getFotos())
+                .anonimo(request.isAnonimo())
+                .status(Status.ENVIADO)
+                .data(LocalDate.now())
                 .build();
         try {
             Denuncia salvo = usuarioService.enviarDenuncia(denuncia);

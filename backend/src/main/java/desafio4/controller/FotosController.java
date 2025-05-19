@@ -19,7 +19,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/denuncia")
+@RequestMapping("/api/fotos")
 public class FotosController {
     @Autowired
     DenunciaService denunciaService;
@@ -32,9 +32,9 @@ public class FotosController {
     @PostMapping(value = "{id}", consumes = {"multipart/form-data"})
     public ResponseEntity salvar(
             @PathVariable UUID id,
-            @RequestPart(value = "foto", required = false) MultipartFile foto1,
-            @RequestPart(value = "foto", required = false) MultipartFile foto2,
-            @RequestPart(value = "foto", required = false) MultipartFile foto3) throws IOException {
+            @RequestPart(value = "foto1", required = false) MultipartFile foto1,
+            @RequestPart(value = "foto2", required = false) MultipartFile foto2,
+            @RequestPart(value = "foto3", required = false) MultipartFile foto3) throws IOException {
 
         //Busca por denúncia à qual serão vinculadas as fotos
         Denuncia denuncia = denunciaService.buscarPorId(id).get();
@@ -62,9 +62,9 @@ public class FotosController {
     @PutMapping(value = "{id}", consumes = {"multipart/form-data"})
     public ResponseEntity atualizar(
             @PathVariable UUID id,
-            @RequestPart(value = "foto", required = false) MultipartFile foto1,
-            @RequestPart(value = "foto", required = false) MultipartFile foto2,
-            @RequestPart(value = "foto", required = false) MultipartFile foto3) {
+            @RequestPart(value = "foto1", required = false) MultipartFile foto1,
+            @RequestPart(value = "foto2", required = false) MultipartFile foto2,
+            @RequestPart(value = "foto3", required = false) MultipartFile foto3) {
         try {
             // Recupera as fotos existentes do banco de dados
             Optional<Fotos> fotosExistenteOptional = fotosService.buscarPorId(id);
