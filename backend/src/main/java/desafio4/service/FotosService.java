@@ -2,7 +2,9 @@ package desafio4.service;
 
 import desafio4.exception.BuscaVaziaRunTime;
 import desafio4.exception.RegraNegocioRunTime;
+import desafio4.model.entity.Denuncia;
 import desafio4.model.entity.Fotos;
+import desafio4.model.repo.DenunciaRepo;
 import desafio4.model.repo.FotosRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,6 +18,9 @@ import java.util.UUID;
 public class FotosService {
     @Autowired
     FotosRepo repo;
+
+    @Autowired
+    DenunciaRepo denunciaRepo;
 
     @Transactional
     public Fotos salvar(Fotos fotos) {
@@ -38,6 +43,13 @@ public class FotosService {
     public Optional<Fotos> buscarPorId(UUID id) {
         verificarId(id);
         return repo.findById(id);
+    }
+
+    public Optional<Fotos> buscarPorDenuncia(UUID id) {
+        Denuncia denuncia = denunciaRepo.findById(id).get();
+        Optional<Fotos> fotos = repo.findFotosByDenuncia(denuncia);
+
+        return fotos;
     }
 
     @Transactional

@@ -19,6 +19,7 @@ public class DenunciaDTO {
     private String descricao;
     private BigDecimal latitude;
     private BigDecimal longitude;
+    private boolean anonimo;
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate data;
     private Status status;

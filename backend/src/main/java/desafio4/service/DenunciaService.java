@@ -3,7 +3,9 @@ package desafio4.service;
 import desafio4.exception.BuscaVaziaRunTime;
 import desafio4.exception.RegraNegocioRunTime;
 import desafio4.model.entity.Denuncia;
+import desafio4.model.entity.Usuario;
 import desafio4.model.repo.DenunciaRepo;
+import desafio4.model.repo.UsuarioRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,6 +18,9 @@ import java.util.UUID;
 public class DenunciaService {
     @Autowired
     DenunciaRepo repo;
+
+    @Autowired
+    UsuarioRepo usuarioRepo;
 
     @Transactional
     public Denuncia salvar(Denuncia denuncia) {
@@ -44,6 +49,17 @@ public class DenunciaService {
 
     public List<Denuncia> buscarPorTitulo(String titulo) {
         List<Denuncia> lista = repo.findByTitulo(titulo);
+
+        if (lista.isEmpty()){
+            throw new BuscaVaziaRunTime();
+        }
+
+        return lista;
+    }
+
+    public List<Denuncia> buscarPorUsuario(UUID id) {
+        Usuario usuario = usuarioRepo.findById(id).get();
+        List<Denuncia> lista = repo.findByUsuario(usuario);
 
         if (lista.isEmpty()){
             throw new BuscaVaziaRunTime();

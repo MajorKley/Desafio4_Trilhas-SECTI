@@ -45,6 +45,9 @@ public class Denuncia implements Serializable{
     private BigDecimal longitude;
 
     @Column(nullable = false)
+    private boolean anonimo;
+
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     @EqualsAndHashCode.Include
     private Status status = Status.ENVIADO;
