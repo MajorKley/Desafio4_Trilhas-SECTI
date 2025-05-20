@@ -1,3 +1,9 @@
+const API_BASE_URL = "http://localhost:8080";
+
+const SecurityConstants = {
+  HEADER_NAME: "Authorization",
+};
+
 document.addEventListener("DOMContentLoaded", () => {
   updateLoginStatus();
 
@@ -80,111 +86,89 @@ function setupLoginForms() {
     const email = document.getElementById("login-email").value;
     const password = document.getElementById("login-password").value;
 
-    
     if (!email || !password) {
       alert("Por favor, preencha todos os campos.");
       return;
     }
 
-    const users = JSON.parse(localStorage.getItem("ecodenunciaUsers") || "[]");
-    const user = users.find((u) => u.email === email);
-
-    if (!user) {
-      alert(
-        "Usuário não encontrado. Por favor, verifique seu e-mail ou cadastre-se."
-      );
-      return;
-    }
-
-    if (user.password !== password) {
-      alert("Senha incorreta. Por favor, tente novamente.");
-      return;
-    }
+    axios.post(`${API_BASE_URL}/login`, {
+      email: email,
+      senha: password
+    }, {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+        .then(response => {
+          const token = response.headers[SecurityConstants.HEADER_NAME.toLowerCase()];
+          const userData = response.data.user;
 
 
-    localStorage.setItem(
-      "ecodenunciaUser",
-      JSON.stringify({
-        email,
-        loggedIn: true,
-        userId: user.id,
-      })
-    );
+          // Armazenar token e dados do usuário
+          localStorage.setItem("ecodenunciaUser", JSON.stringify({
+            email: userData.email,
+            role: userData.role,
+            loggedIn: true,
+            token: token
+          }));
 
-    alert("Login realizado com sucesso!");
-
-    window.location.href = "../index.html";
+          alert("Login realizado com sucesso!");
+          window.location.href = "../index.html";
+        })
+        .catch(error => {
+          if (error.response) {
+            // Erros do servidor
+            switch (error.response.status) {
+              case 401:
+                alert("Credenciais inválidas");
+                break;
+              default:
+                alert("Erro no login: " + error.response.data);
+            }
+          } else {
+            alert("Erro de conexão com o servidor");
+          }
+        });
   });
 
   registerForm.addEventListener("submit", (e) => {
     e.preventDefault();
-    console.log("Formulário de cadastro submetido");
+    const nome = document.getElementById("register-name").value;
     const email = document.getElementById("register-email").value;
     const password = document.getElementById("register-password").value;
-    const confirmPassword = document.getElementById(
-      "register-confirm-password"
-    ).value;
-    const terms = document.getElementById("terms").checked;
+    const confirmPassword = document.getElementById("register-confirm-password").value;
 
-  
-    if (!email || !password || !confirmPassword) {
-      alert("Por favor, preencha todos os campos.");
-      return;
-    }
-
-    // regex p validar o formato do e-mail
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      alert("Por favor, insira um e-mail válido.");
+    // Validações
+    if (!nome || !email || !password || !confirmPassword) {
+      alert("Preencha todos os campos!");
       return;
     }
 
     if (password !== confirmPassword) {
-      alert("As senhas não coincidem.");
+      alert("As senhas não coincidem!");
       return;
     }
 
-    if (password.length < 6) {
-      alert("A senha deve ter pelo menos 6 caracteres.");
-      return;
-    }
-
-    if (!terms) {
-      alert("Você precisa aceitar os termos de uso.");
-      return;
-    }
-
-    const users = JSON.parse(localStorage.getItem("ecodenunciaUsers") || "[]");
-    if (users.some((user) => user.email === email)) {
-      alert(
-        "Este e-mail já está cadastrado. Por favor, use outro e-mail ou faça login."
-      );
-      return;
-    }
-
-    const newUser = {
-      id: Date.now().toString(),
-      email,
-      password,
-      createdAt: new Date().toISOString(),
-    };
-
-    users.push(newUser);
-    localStorage.setItem("ecodenunciaUsers", JSON.stringify(users));
-
-    // login automático
-    localStorage.setItem(
-      "ecodenunciaUser",
-      JSON.stringify({
-        email,
-        loggedIn: true,
-        userId: newUser.id,
-      })
-    );
-
-    alert("Cadastro realizado com sucesso! Você está logado agora.");
-
-    window.location.href = "../index.html";
+    axios.post(`${API_BASE_URL}/api/usuario/salvar`, {
+      nome: nome,
+      email: email,
+      senha: password
+    }, {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+        .then(response => {
+          alert("Cadastro realizado! Faça login.");
+          loginTab.click(); // Redireciona para a aba de login
+        })
+        .catch(error => {
+          if (error.response) {
+            alert("Erro: " + error.response.data); // Exibe a mensagem do backend
+          } else {
+            alert("Erro de conexão");
+          }
+        });
   });
 }
 
@@ -201,7 +185,7 @@ function isLoggedIn() {
 function logout() {
   localStorage.removeItem("ecodenunciaUser");
   alert("Logout realizado com sucesso!");
-  window.location.href = "../index.html";
+  window.location.href = "../src/index.html";
 }
 
 function updateLoginStatus() {
