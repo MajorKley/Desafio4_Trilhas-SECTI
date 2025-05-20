@@ -8,11 +8,11 @@
 		<version>3.4.0</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.ufma</groupId>
-	<artifactId>PortalEgresso</artifactId>
+	<groupId>trilhas</groupId>
+	<artifactId>Desafio 4</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>PortalEgresso</name>
-	<description>Portal de Egressos</description>
+	<name>Desafio4</name>
+	<description>Back End Desafio 4</description>
 	<url/>
 	<licenses>
 		<license/>
