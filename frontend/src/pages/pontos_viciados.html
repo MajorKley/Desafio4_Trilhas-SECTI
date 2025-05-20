@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pontos Viciados - EcoDenúncia</title>
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/pages/pontos_viciados.css">
+</head>
+
+<body>
+  <header>
+    <div class="logo">
+      <a href="../index.html">
+        <img src="../assets/logo.png" alt="EcoDenúncia Logo">
+      </a>
+    </div>
+
+    <nav class="menu">
+      <ul>
+        <li><a href="../index.html">HOME</a></li>
+        <li><a href="sobre_nos.html">SOBRE NÓS</a></li>
+        <li><a href="pontos_viciados.html" class="active">PONTOS VICIADOS</a></li>
+        <li><a href="cuide_lixo.html">CUIDE DO LIXO</a></li>
+        <li id="user-status">
+          <a href="login.html" id="login-link">LOGIN</a>
+          <a href="#" id="logout-link" style="display: none;" onclick="logout(); return false;">LOGOUT</a>
+        </li>
+      </ul>
+    </nav>
+
+    <button class="menu-button" onclick="toggleMenu()">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </header>
+
+  <main class="pontos-viciados-page">
+    <div class="container">
+      <div class="map-container">
+        <div class="map-header">
+          <div class="map-title">
+            <h1>Mapa dos Pontos de Descarte Irregular</h1>
+            <p>No mapa é possível visualizar todos pontos de denúncia realizados</p>
+          </div>
+          <div class="search-controls">
+            <div class="search-bar">
+              <input type="text" id="address-input" placeholder="Digite o endereço">
+              <button id="search-button">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+              </button>
+            </div>
+            <div class="radius-control">
+              <label for="search-radius">Raio de busca:</label>
+              <select id="search-radius">
+                <option value="500">500m</option>
+                <option value="1000" selected>1km</option>
+                <option value="2000">2km</option>
+                <option value="5000">5km</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        
+        <div class="map-content">
+          <div id="map"></div>
+          
+          <div class="map-legend">
+            <h2>Legenda do mapa</h2>
+            <div class="legend-items">
+              <div class="legend-item">
+                <div class="marker-icon pending"></div>
+                <span>Denúncias pendentes</span>
+              </div>
+              <div class="legend-item">
+                <div class="marker-icon resolved"></div>
+                <span>Denúncias resolvidas</span>
+              </div>
+              <div class="legend-item">
+                <div class="marker-icon hotspot"></div>
+                <span>Pontos viciados</span>
+              </div>
+              <div class="legend-item">
+                <div class="circle-overlay"></div>
+                <span>Área de busca</span>
+              </div>
+            </div>
+            
+            <div class="search-info">
+              <h3>Informações da busca</h3>
+              <div id="search-stats">
+                <p>Selecione um endereço para ver estatísticas.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="../js/main.js"></script>
+  <script src="../js/pontos_viciados.js"></script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCL0fItqeFqloFHLU5pi4ALvEFuAaIqy7Y&libraries=places,geometry&callback=initMap" async defer></script>
+</body>
+
+</html>

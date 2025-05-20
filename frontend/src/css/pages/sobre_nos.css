@@ -1,0 +1,164 @@
+.sobre-nos-page {
+  color: var(--color-text);
+  padding: 0;
+  position: relative;
+  background-color: #f2f2f2; 
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+section {
+  margin-bottom: 0; 
+  padding: 10px 0; 
+}
+
+section h2 {
+  font-size: 1.75rem;
+  color: var(--color-primary);
+  margin-bottom: 0.3rem; 
+}
+
+.highlight {
+  display: inline-block;
+  background-color: #e9d100; 
+  padding: 0 0.5rem;
+}
+
+.content-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0; 
+}
+
+.content-wrapper.reverse {
+  flex-direction: row-reverse;
+}
+
+.text-content {
+  flex: 2;
+  padding-right: 0; 
+}
+
+.text-content p {
+  font-size: 1.3rem;
+  line-height: 1.3; 
+  margin-bottom: 0.3rem; 
+  color: var(--color-text);
+}
+
+.image-content {
+  flex: 1; 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-left: 0; 
+}
+
+.trash-icon {
+  max-width: none; 
+  width: 250px; 
+  height: auto;
+  max-height: none;
+}
+
+.missao-section .trash-icon {
+  margin-left: -20px; 
+}
+
+.sobre-section .trash-icon {
+  margin-right: -20px; 
+}
+
+.agradecimento-section .trash-icon {
+  margin-left: -20px; 
+}
+
+.missao-section {
+  padding-top: 15px; 
+}
+
+.sobre-section {
+  padding: 5px 0; 
+  background-color: transparent; 
+  border-radius: 0; 
+}
+
+.agradecimento-section {
+  padding: 5px 0; 
+}
+
+.agradecimento-text {
+  color: #07592A !important;
+  font-weight: bold;
+  font-size: 1.3rem !important;
+  margin-bottom: 0.2rem !important; 
+}
+
+.arrow-text {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin-bottom: 0.3rem;
+}
+
+.arrow-icon {
+  width: 15px;
+  height: auto;
+}
+
+.btn-primary {
+  background-color: #d93c4a; 
+  border: none;
+  color: white;
+  padding: 0.5rem 1.5rem; 
+  border-radius: 50px;
+  font-weight: bold;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 1.1rem; 
+  margin-top: 0.3rem;
+  transition: background-color 0.3s;
+}
+
+.btn-primary:hover {
+  background-color: #c0353f;
+}
+
+
+.bottom-logo {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  width: 120px; 
+}
+
+.bottom-logo img {
+  width: 100%;
+  height: auto;
+}
+
+@media (max-width: 768px) {
+  .content-wrapper,
+  .content-wrapper.reverse {
+    flex-direction: column;
+    gap: 0;
+  }
+  
+  .image-content {
+    order: -1; 
+  }
+  
+  .trash-icon {
+    width: 180px; 
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+  
+  .bottom-logo {
+    width: 60px;
+  }
+}

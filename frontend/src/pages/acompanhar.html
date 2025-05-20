@@ -21,9 +21,9 @@
     <nav class="menu">
       <ul>
         <li><a href="../index.html">HOME</a></li>
-        <li><a href="#">SOBRE NÓS</a></li>
-        <li><a href="#">PONTOS VICIADOS</a></li>
-        <li><a href="#">CUIDE DO LIXO</a></li>
+        <li><a href="sobre_nos.html">SOBRE NÓS</a></li>
+        <li><a href="pontos_viciados.html">PONTOS VICIADOS</a></li>
+        <li><a href="cuide_lixo.html">CUIDE DO LIXO</a></li>
         <li id="user-status">
           <a href="login.html" id="login-link">LOGIN</a>
           <a href="#" id="logout-link" style="display: none;" onclick="logout(); return false;">LOGOUT</a>
@@ -42,19 +42,30 @@
     <div class="container">
       <h1 class="page-title">Histórico de Denúncias</h1>
 
-      <div class="denuncias-pendentes">
-
+      <!-- botões de alternância entre lista e mapa -->
+      <div class="view-controls" style="margin-bottom: 1.25rem; display: flex; gap: 0.625rem;">
+        <button id="view-list" class="btn btn-secondary active" style="flex: 1;">Visualizar em Lista</button>
+        <button id="view-map" class="btn btn-secondary" style="flex: 1;">Visualizar no Mapa</button>
       </div>
 
-      <h2 class="section-title">Denúncias Resolvidas</h2>
-      <p class="section-subtitle">Aperte na palavra "Resolvido" para que a denúncia retorne à seção "Pendente"</p>
+      <!-- contêiner pro mapa -->
+      <div id="map-view" style="display: none; margin-bottom: 1.25rem;">
+        <div id="denuncias-map" style="height: 31.25rem; width: 100%; border-radius: var(--border-radius-md);"></div>
+      </div>
 
-      <div class="denuncias-resolvidas">
+      <div id="list-view">
+        <h2 class="section-title">Denúncias Pendentes</h2>
+        <div class="denuncias-pendentes">
+        </div>
+
+        <h2 class="section-title">Denúncias Resolvidas</h2>
+        <p class="section-subtitle">Aperte na palavra "Resolvido" para que a denúncia retorne à seção "Pendente"</p>
+        <div class="denuncias-resolvidas">
+        </div>
       </div>
     </div>
   </main>
 
-  <!-- modal de visualização de denúncia -->
   <div id="denuncia-modal" class="modal">
     <div class="modal-content">
       <div class="modal-header">
@@ -83,6 +94,11 @@
             <div class="info-label">Data:</div>
             <div id="modal-data" class="info-value">Carregando...</div>
           </div>
+
+          <div class="info-row">
+            <div class="info-label">Coordenadas:</div>
+            <div id="modal-coordenadas" class="info-value">Não disponível</div>
+          </div>
           <div class="info-row full">
             <div class="info-label">Descrição:</div>
             <div id="modal-descricao" class="info-value descricao">Carregando...</div>
@@ -103,6 +119,7 @@
 
   <script src="../js/main.js"></script>
   <script src="../js/acompanhar.js"></script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCL0fItqeFqloFHLU5pi4ALvEFuAaIqy7Y&callback=initMap" async defer></script>
 </body>
 
 </html>

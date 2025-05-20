@@ -34,7 +34,6 @@
   margin-bottom: 20px;
 }
 
-/* Cards */
 .denuncia-card {
   border-radius: 10px;
   padding: 15px 20px;
@@ -172,4 +171,144 @@
     flex: 1;
     text-align: center;
   }
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+  background-color: #fff;
+  margin: 10% auto;
+  padding: 0;
+  border-radius: 10px;
+  width: 80%;
+  max-width: 600px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  animation: modalFadeIn 0.3s;
+}
+
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.modal-header {
+  padding: 15px 20px;
+  background-color: #14592a;
+  color: white;
+  border-radius: 10px 10px 0 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-header h2 {
+  margin: 0;
+  font-size: 20px;
+}
+
+.modal-close {
+  color: white;
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+}
+
+.modal-body {
+  padding: 20px;
+}
+
+.denuncia-info {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.info-row {
+  display: flex;
+}
+
+.info-row.full {
+  flex-direction: column;
+  gap: 5px;
+}
+
+.info-label {
+  width: 120px;
+  font-weight: bold;
+  color: #464746;
+}
+
+.info-value {
+  flex: 1;
+}
+
+.info-value.descricao {
+  background-color: #f5f5f5;
+  padding: 10px;
+  border-radius: 5px;
+  margin-top: 5px;
+}
+
+.foto-container img {
+  max-width: 100%;
+  border-radius: 5px;
+  margin-top: 5px;
+}
+
+.modal-footer {
+  padding: 15px 20px;
+  border-top: 1px solid #e0e0e0;
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* Cores para status no modal */
+.text-green-600 {
+  color: #14592a;
+}
+
+.text-red-600 {
+  color: #d93c4a;
+}
+
+.btn {
+  padding: 8px 20px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  border: none;
+}
+
+.btn-primary {
+  background-color: #14592a;
+  color: white;
+}
+
+.btn-accent {
+  background-color: #d93c4a;
+  color: white;
+}
+
+.btn:hover {
+  opacity: 0.9;
 }

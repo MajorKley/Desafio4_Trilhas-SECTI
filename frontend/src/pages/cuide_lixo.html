@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cuide do Lixo - EcoDenúncia</title>
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/pages/cuide_lixo.css">
+</head>
+
+<body>
+  <header>
+    <div class="logo">
+      <a href="../index.html">
+        <img src="../assets/logo.png" alt="EcoDenúncia Logo">
+      </a>
+    </div>
+
+    <nav class="menu">
+      <ul>
+        <li><a href="../index.html">HOME</a></li>
+        <li><a href="sobre_nos.html">SOBRE NÓS</a></li>
+        <li><a href="pontos_viciados.html">PONTOS VICIADOS</a></li>
+        <li><a href="cuide_lixo.html" class="active">CUIDE DO LIXO</a></li>
+        <li id="user-status">
+          <a href="login.html" id="login-link">LOGIN</a>
+          <a href="#" id="logout-link" style="display: none;" onclick="logout(); return false;">LOGOUT</a>
+        </li>
+      </ul>
+    </nav>
+
+    <button class="menu-button" onclick="toggleMenu()">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </header>
+
+  <main class="cuide-lixo-page">
+    <div class="container">
+
+      <div class="carousel-container">
+        <div class="carousel-slides">
+          <!-- slide 1 -->
+          <div class="carousel-slide">
+            <div class="slide-content">
+              <div class="slide-text">
+                <h2>Separe corretamente seus resíduos</h2>
+                <p>Separar o lixo reciclável do orgânico é o primeiro passo para uma gestão de resíduos eficiente.</p>
+                <a href="https://www.uol.com.br/ecoa/ultimas-noticias/2022/04/06/como-separar-seu-lixo-em-4-passos-para-o-descarte-correto-de-reciclaveis.htm" class="btn btn-primary">Saiba mais</a>
+              </div>
+              <div class="slide-image">
+                <img src="../assets/separacao_lixo.png" alt="Separação de resíduos">
+              </div>
+            </div>
+          </div>
+
+          <!-- slide 2 -->
+          <div class="carousel-slide">
+            <div class="slide-content">
+              <div class="slide-text">
+                <h2>Conheça o lixo eletrônico</h2>
+                <p>Antes de descartar embalagens recicláveis, lave-as para remover resíduos e seque-as para evitar odores e contaminações.</p>
+                <a href="https://visaosocioambiental.com.br/lavar-o-lixo-reciclavel-antes-do-descarte-uma-pratica-necessaria-que-muitos-desconhecem/" class="btn btn-primary">Saiba mais</a>
+              </div>
+              <div class="slide-image">
+                <img src="../assets/lave_lixo.png" alt="Lixo eletrônico">
+              </div>
+            </div>
+          </div>
+
+          <!-- slide 3 -->
+          <div class="carousel-slide">
+            <div class="slide-content">
+              <div class="slide-text">
+                <h2>Pratique a compostagem doméstica</h2>
+                <p>Transforme resíduos orgânicos, como cascas de frutas e restos de alimentos, em adubo natural para plantas.</p>
+                <a href="https://blog.esferaenergia.com.br/sustentabilidade/compostagem-domestica-2" class="btn btn-primary">Saiba mais</a>
+              </div>
+              <div class="slide-image">
+                <img src="../assets/compostagem.png" alt="Reciclagem">
+              </div>
+            </div>
+          </div>
+
+          <!-- slide 4 -->
+          <div class="carousel-slide">
+            <div class="slide-content">
+              <div class="slide-text">
+                <h2>Adote os 5 R's da sustentabilidade</h2>
+                <p>Repense, Reduza, Reutilize, Recicle e Recuse. Essas práticas ajudam a minimizar a geração de resíduos e promovem um consumo consciente.</p>
+                <a href="https://www.mt.senac.br/ecos/dicas/210/#:~:text=As%20cinco%20palavras%2C%20repensar%2C%20recusar,em%20compromisso%20com%20meio%20ambiente.&text=Quem%20nunca%20comprou%20alguma%20coisa,comprou%20algo%20que%20j%C3%A1%20tinha%3F" class="btn btn-primary">Saiba mais</a>
+              </div>
+              <div class="slide-image">
+                <img src="../assets/sustentabilidade.png" alt="5 Rs">
+              </div>
+            </div>
+          </div>
+
+          <!-- slide 5 -->
+          <div class="carousel-slide">
+            <div class="slide-content">
+              <div class="slide-text">
+                <h2>Evite o uso de descartáveis</h2>
+                <p>Opte por produtos reutilizáveis, como sacolas de pano, garrafas e utensílios duráveis, reduzindo o volume de lixo gerado.</p>
+                <a href="#" class="btn btn-primary">Saiba mais</a>
+              </div>
+              <div class="slide-image">
+                <img src="../assets/descartaveis.png" alt="Coleta seletiva">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- controles do carrossel -->
+        <button class="carousel-control prev" aria-label="Slide anterior">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="15 18 9 12 15 6"></polyline>
+          </svg>
+        </button>
+        <button class="carousel-control next" aria-label="Próximo slide">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </button>
+
+        <!-- indicadores do carrossel -->
+        <div class="carousel-indicators">
+          <button class="indicator active" data-slide="0" aria-label="Ir para slide 1"></button>
+          <button class="indicator" data-slide="1" aria-label="Ir para slide 2"></button>
+          <button class="indicator" data-slide="2" aria-label="Ir para slide 3"></button>
+          <button class="indicator" data-slide="3" aria-label="Ir para slide 4"></button>
+          <button class="indicator" data-slide="4" aria-label="Ir para slide 5"></button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+
+  <script src="../js/main.js"></script>
+  <script src="../js/cuide_lixo.js"></script>
+</body>
+
+</html>

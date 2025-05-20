@@ -1,4 +1,3 @@
-// verifica o status de login ao carregar a página
 document.addEventListener("DOMContentLoaded", () => {
   updateLoginStatus();
 
@@ -41,7 +40,6 @@ function setupLoginForms() {
   const switchToRegister = document.getElementById("switch-to-register");
   const switchToLogin = document.getElementById("switch-to-login");
 
-  // verifica se os elementos foram encontrados
   console.log("Login Form:", loginForm);
   console.log("Register Form:", registerForm);
 
@@ -49,7 +47,6 @@ function setupLoginForms() {
   loginForm.style.display = "block";
   registerForm.style.display = "none";
 
-  // alterna entre as abas 
   loginTab.addEventListener("click", () => {
     loginTab.classList.add("active");
     registerTab.classList.remove("active");
@@ -77,7 +74,6 @@ function setupLoginForms() {
     console.log("Alternando para o formulário de login");
   });
 
-  // processa formulário de login
   loginForm.addEventListener("submit", (e) => {
     e.preventDefault();
     console.log("Formulário de login submetido");
@@ -90,7 +86,6 @@ function setupLoginForms() {
       return;
     }
 
-    //verifica se o usuário já existe
     const users = JSON.parse(localStorage.getItem("ecodenunciaUsers") || "[]");
     const user = users.find((u) => u.email === email);
 
@@ -121,7 +116,6 @@ function setupLoginForms() {
     window.location.href = "../index.html";
   });
 
-  // processa formulário de cadastro
   registerForm.addEventListener("submit", (e) => {
     e.preventDefault();
     console.log("Formulário de cadastro submetido");
@@ -160,7 +154,6 @@ function setupLoginForms() {
       return;
     }
 
-    // verifica se o e-mail já está cadastrado
     const users = JSON.parse(localStorage.getItem("ecodenunciaUsers") || "[]");
     if (users.some((user) => user.email === email)) {
       alert(
@@ -169,7 +162,6 @@ function setupLoginForms() {
       return;
     }
 
-    // criação de novo usuário
     const newUser = {
       id: Date.now().toString(),
       email,
@@ -177,11 +169,10 @@ function setupLoginForms() {
       createdAt: new Date().toISOString(),
     };
 
-    // adiciona à lista de usuários
     users.push(newUser);
     localStorage.setItem("ecodenunciaUsers", JSON.stringify(users));
 
-    // faz login automático
+    // login automático
     localStorage.setItem(
       "ecodenunciaUser",
       JSON.stringify({
@@ -213,7 +204,6 @@ function logout() {
   window.location.href = "../index.html";
 }
 
-// atualiza o status de login no menu
 function updateLoginStatus() {
   const loginLink = document.getElementById("login-link");
   const logoutLink = document.getElementById("logout-link");
@@ -224,7 +214,6 @@ function updateLoginStatus() {
     loginLink.style.display = "none";
     logoutLink.style.display = "inline";
 
-    // obtém os dados do usuário
     const userData = JSON.parse(localStorage.getItem("ecodenunciaUser"));
     logoutLink.textContent = `LOGOUT (${userData.email})`;
   } else {

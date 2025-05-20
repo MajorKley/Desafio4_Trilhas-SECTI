@@ -1,3 +1,9 @@
+html, body {
+  overflow-x: visible;
+  width: 100%;
+  position: relative;
+}
+
 .denuncia-page {
   background-color: var(--color-background);
   padding: 40px 0;
@@ -132,18 +138,20 @@
   margin-top: 8px;
 }
 
+#btn-usar-localizacao {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 .btn-submit {
-  background-color: var(--color-primary);
-  color: white;
-  padding: 16px 32px;
-  font-size: 18px;
-  font-weight: bold;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  width: 100%;
-  margin-top: 10px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: auto; 
+  min-width: 200px; 
+  padding-left: 40px; 
+  padding-right: 40px;
 }
 
 .btn-submit:hover {

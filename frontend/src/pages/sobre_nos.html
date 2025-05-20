@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sobre Nós - EcoDenúncia</title>
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/pages/sobre_nos.css">
+</head>
+
+<body>
+  <header>
+    <div class="logo">
+      <a href="../index.html">
+        <img src="../assets/logo.png" alt="EcoDenúncia Logo">
+      </a>
+    </div>
+
+    <nav class="menu">
+      <ul>
+        <li><a href="../index.html">HOME</a></li>
+        <li><a href="sobre_nos.html" class="active">SOBRE NÓS</a></li>
+        <li><a href="pontos_viciados.html">PONTOS VICIADOS</a></li>
+        <li><a href="cuide_lixo.html">CUIDE DO LIXO</a></li>
+        <li id="user-status">
+          <a href="login.html" id="login-link">LOGIN</a>
+          <a href="#" id="logout-link" style="display: none;" onclick="logout(); return false;">LOGOUT</a>
+        </li>
+      </ul>
+    </nav>
+
+    <button class="menu-button" onclick="toggleMenu()">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </header>
+
+  <main class="sobre-nos-page">
+    <div class="container">
+      <section class="missao-section">
+        <div class="content-wrapper">
+          <div class="text-content">
+            <h2>Qual a nossa <span class="highlight">Missão?</span></h2>
+            <p>Conectar cidadãos e poder público no combate ao descarte irregular de resíduos sólidos, promovendo uma cidade mais limpa, saudável e consciente.</p>
+          </div>
+          <div class="image-content">
+            <img src="../assets/lixoAmarelo.png" alt="Ícone de lixo amarelo" class="trash-icon">
+          </div>
+        </div>
+      </section>
+
+      <section class="sobre-section">
+        <div class="content-wrapper reverse">
+          <div class="text-content">
+            <h2>O que é o <span class="highlight">EcoDenúncia?</span></h2>
+            <p>O EcoDenúncia é um sistema desenvolvido para facilitar o registro e encaminhamento de denúncias sobre descarte irregular de lixo. A plataforma permite que qualquer cidadão aponte locais com acúmulo de resíduos e ajude a manter a cidade mais limpa. As informações são direcionadas para os órgãos responsáveis de forma prática e organizada.</p>
+          </div>
+          <div class="image-content">
+            <img src="../assets/lixoVermelho.png" alt="Ícone de lixo vermelho" class="trash-icon">
+          </div>
+        </div>
+      </section>
+
+      <section class="agradecimento-section">
+        <div class="content-wrapper">
+          <div class="text-content">
+            <h2><span class="highlight">Agradecimento</span></h2>
+            <p class="agradecimento-text">Obrigado por contribuir com uma cidade mais limpa!</p>
+            <div class="arrow-text">
+              <img src="../assets/Polygon 2.png" alt="Seta amarela" class="arrow-icon">
+              <p>Faça sua parte e nos ajude a combater o descarte irregular.</p>
+            </div>
+            <a href="denuncia.html" class="btn btn-primary">Denunciar</a>
+          </div>
+          <div class="image-content">
+            <img src="../assets/lixoVerde.png" alt="Ícone de lixo verde" class="trash-icon">
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <div class="bottom-logo">
+      <img src="../assets/logo.png" alt="EcoDenúncia Logo">
+    </div>
+  </main>
+
+  <script src="../js/main.js"></script>
+</body>
+
+</html>

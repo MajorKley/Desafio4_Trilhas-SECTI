@@ -21,9 +21,9 @@
     <nav class="menu">
       <ul>
         <li><a href="../index.html">HOME</a></li>
-        <li><a href="#">SOBRE NÓS</a></li>
-        <li><a href="#">PONTOS VICIADOS</a></li>
-        <li><a href="#">CUIDE DO LIXO</a></li>
+        <li><a href="../pages/sobre_nos.html">SOBRE NÓS</a></li>
+        <li><a href="pontos_viciados.html">PONTOS VICIADOS</a></li>
+        <li><a href="cuide_lixo.html">CUIDE DO LIXO</a></li>
         <li id="user-status">
           <a href="login.html" id="login-link">LOGIN</a>
           <a href="#" id="logout-link" style="display: none;" onclick="logout(); return false;">LOGOUT</a>
@@ -60,13 +60,19 @@
         </div>
 
         <div class="form-group">
-          <label for="endereco">Endereço</label>
-          <input type="text" id="endereco" placeholder="Rua, número, bairro" required>
+          <label for="mapa">Localização</label>
+          <div id="map" style="height: 25rem; width: 100%; margin-bottom: 1rem; border-radius: var(--border-radius-sm);"></div>
+          <p class="form-help">Arraste o marcador para indicar o local exato no mapa.</p>
+
+          <!-- armazenamento das coordenadas -->
+          <input type="hidden" id="latitude" name="latitude" required>
+          <input type="hidden" id="longitude" name="longitude" required>
         </div>
 
         <div class="form-group">
-          <label for="cidade">Cidade</label>
-          <input type="text" id="cidade" required>
+          <button type="button" id="btn-usar-localizacao" class="btn btn-secondary" style="width: auto; margin-bottom: 1rem;">
+            Usar minha localização atual
+          </button>
         </div>
 
         <div class="form-group">
@@ -111,6 +117,120 @@
         reader.readAsDataURL(file);
       }
     });
+  </script>
+
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCL0fItqeFqloFHLU5pi4ALvEFuAaIqy7Y&callback=initMap" async defer></script>
+
+  <script>
+    let map;
+    let marker;
+
+    function initMap() {
+      const initialPosition = { lat: -2.5391, lng: -44.2829 };
+
+      map = new google.maps.Map(document.getElementById("map"), {
+        center: initialPosition,
+        zoom: 13,
+        mapTypeControl: true,
+        streetViewControl: false,
+        fullscreenControl: true,
+      });
+
+      marker = new google.maps.Marker({
+        position: initialPosition,
+        map: map,
+        draggable: true,
+        animation: google.maps.Animation.DROP,
+        title: "Arraste para o local da denúncia",
+      });
+
+      document.getElementById("latitude").value = initialPosition.lat;
+      document.getElementById("longitude").value = initialPosition.lng;
+
+      map.addListener("click", (event) => {
+        const clickedPosition = event.latLng;
+        marker.setPosition(clickedPosition);
+
+        document.getElementById("latitude").value = clickedPosition.lat();
+        document.getElementById("longitude").value = clickedPosition.lng();
+
+        updateAddressFromCoordinates(clickedPosition);
+      });
+
+      marker.addListener("dragend", () => {
+        const newPosition = marker.getPosition();
+
+        document.getElementById("latitude").value = newPosition.lat();
+        document.getElementById("longitude").value = newPosition.lng();
+
+        updateAddressFromCoordinates(newPosition);
+      });
+
+      document.getElementById("btn-usar-localizacao").addEventListener("click", useCurrentLocation);
+    }
+
+    function useCurrentLocation() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            const currentPosition = {
+              lat: position.coords.latitude,
+              lng: position.coords.longitude
+            };
+
+            map.setCenter(currentPosition);
+            marker.setPosition(currentPosition);
+
+            document.getElementById("latitude").value = currentPosition.lat;
+            document.getElementById("longitude").value = currentPosition.lng;
+
+            updateAddressFromCoordinates(currentPosition);
+          },
+          (error) => {
+            let errorMessage;
+            switch (error.code) {
+              case error.PERMISSION_DENIED:
+                errorMessage = "Você negou a permissão de localização.";
+                break;
+              case error.POSITION_UNAVAILABLE:
+                errorMessage = "Informações de localização indisponíveis.";
+                break;
+              case error.TIMEOUT:
+                errorMessage = "Tempo esgotado ao obter localização.";
+                break;
+              default:
+                errorMessage = "Erro desconhecido ao obter localização.";
+            }
+            alert(errorMessage);
+          }
+        );
+      } else {
+        alert("Seu navegador não suporta geolocalização.");
+      }
+    }
+
+    function updateAddressFromCoordinates(position) {
+      const geocoder = new google.maps.Geocoder();
+
+      geocoder.geocode({ location: position }, (results, status) => {
+        if (status === "OK" && results[0]) {
+          const address = results[0].formatted_address;
+
+          if (document.getElementById("endereco")) {
+            document.getElementById("endereco").value = address;
+          }
+
+          for (const component of results[0].address_components) {
+            if (component.types.includes("administrative_area_level_2")) {
+              if (document.getElementById("cidade")) {
+                document.getElementById("cidade").value = component.long_name;
+              }
+              break;
+            }
+          }
+        }
+      });
+    }
   </script>
 </body>
 
