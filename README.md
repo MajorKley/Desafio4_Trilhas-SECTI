@@ -70,7 +70,43 @@ O descarte incorreto de resíduos sólidos em áreas urbanas gera sérios impact
 
 ## 🚀 Como Rodar o Projeto
 
-> Em breve será adicionado o passo a passo de instalação e execução local do projeto.
+### Requisitos:
+- Ter **Docker** instalado.
+
+### Passos:
+1. Clone o repositório:
+   ```bash
+   git clone https://github.com/GiuliaFreulon/portal-egresso
+   cd portal-egresso
+   ```
+
+2. Configure as seguintes variáveis de ambiente:
+   #### Para o backend:
+
+   ```env
+   # Banco de Dados (No projeto foi usado NeonDB - PostgreSQL)
+   DATABASE_URL
+   DATABASE_USER
+   DATABASE_PASSWORD
+
+   # JWT
+   JWT_SECRET_KEY (Use um gerador de chaves Base 64)
+   ```
+   
+   #### Para o backend:
+   
+   ```env
+   # API
+   API_URL (http://localhost:8080)
+   GOOGLE_MAPS_API_KEY (Api do google maps)
+   ```
+
+    **Nota:** O banco de dados disponibilizado para teste é **público** e pode ser fechado ou modificado a qualquer momento.
+
+4. Inicie o contâiner:
+   ```bash
+   docker-compose up -d
+   ```
 
 ---
 
