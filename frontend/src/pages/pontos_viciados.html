@@ -8,6 +8,13 @@
   <link rel="stylesheet" href="../css/main.css">
   <link rel="stylesheet" href="../css/components.css">
   <link rel="stylesheet" href="../css/pages/pontos_viciados.css">
+  <script>
+    // Configurações globais
+    window.APP_CONFIG = {
+      API_URL: "%%API_URL%%",
+      GOOGLE_MAPS_API_KEY: "%%GOOGLE_MAPS_API_KEY%%"
+    };
+  </script>
 </head>
 
 <body>
@@ -106,6 +113,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <script src="../js/main.js"></script>
+  <script src="../js/pontos_viciados.js"></script>
   <script>
     // Carrega a API do Google Maps dinamicamente
     const script = document.createElement('script');
@@ -114,7 +122,6 @@
     script.defer = true;
     document.head.appendChild(script);
   </script>
-  <script src="../js/pontos_viciados.js"></script>
 </body>
 
 </html>
