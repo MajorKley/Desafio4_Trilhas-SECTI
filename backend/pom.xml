@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>trilhas</groupId>
-	<artifactId>Desafio 4</artifactId>
+	<artifactId>Desafio4</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>Desafio4</name>
 	<description>Back End Desafio 4</description>
