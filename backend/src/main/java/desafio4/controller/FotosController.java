@@ -8,6 +8,7 @@ import desafio4.service.DenunciaService;
 import desafio4.service.FotosService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -29,33 +30,34 @@ public class FotosController {
 
     // -------------------- endpoints CRUD ---------------------
 
-    @PostMapping(value = "{id}", consumes = {"multipart/form-data"})
-    public ResponseEntity salvar(
+    @PostMapping(value = "{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity salvarFotos(
             @PathVariable UUID id,
-            @RequestPart(value = "foto1", required = false) MultipartFile foto1,
-            @RequestPart(value = "foto2", required = false) MultipartFile foto2,
-            @RequestPart(value = "foto3", required = false) MultipartFile foto3) throws IOException {
-
-        //Busca por denúncia à qual serão vinculadas as fotos
-        Denuncia denuncia = denunciaService.buscarPorId(id).get();
-
-        //converte as fotos em texto
-        String foto1Base64 = (foto1 != null) ? Base64.getEncoder().encodeToString(foto1.getBytes()) : null;
-        String foto2Base64 = (foto2 != null) ? Base64.getEncoder().encodeToString(foto2.getBytes()) : null;
-        String foto3Base64 = (foto3 != null) ? Base64.getEncoder().encodeToString(foto3.getBytes()) : null;
-
-        Fotos fotos = Fotos.builder()
-                .denuncia(denuncia)
-                .foto1(foto1Base64)
-                .foto2(foto2Base64)
-                .foto3(foto3Base64)
-                .build();
+            @RequestParam(value = "fotos", required = false) MultipartFile[] fotos) {
 
         try {
-            Fotos salvo = fotosService.salvar(fotos);
+            Denuncia denuncia = denunciaService.buscarPorId(id)
+                    .orElseThrow(() -> new RegraNegocioRunTime("Denúncia não encontrada"));
+
+            Fotos fotosEntity = new Fotos();
+            fotosEntity.setDenuncia(denuncia);
+
+            if (fotos != null) {
+                for (int i = 0; i < Math.min(fotos.length, 3); i++) {
+                    String base64Foto = Base64.getEncoder().encodeToString(fotos[i].getBytes());
+                    switch (i) {
+                        case 0: fotosEntity.setFoto1(base64Foto); break;
+                        case 1: fotosEntity.setFoto2(base64Foto); break;
+                        case 2: fotosEntity.setFoto3(base64Foto); break;
+                    }
+                }
+            }
+
+            Fotos salvo = fotosService.salvar(fotosEntity);
             return new ResponseEntity<>(salvo, HttpStatus.CREATED);
-        } catch (RegraNegocioRunTime e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Erro ao processar fotos: " + e.getMessage());
         }
     }
 
