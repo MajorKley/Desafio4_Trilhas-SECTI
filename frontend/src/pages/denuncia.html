@@ -60,7 +60,7 @@
         </div>
 
         <div class="form-group">
-          <label for="mapa">Localização</label>
+          <label for="map">Localização</label>
           <div id="map" style="height: 25rem; width: 100%; margin-bottom: 1rem; border-radius: var(--border-radius-sm);"></div>
           <p class="form-help">Arraste o marcador para indicar o local exato no mapa.</p>
 
@@ -76,7 +76,7 @@
         </div>
 
         <div class="form-group">
-          <label for="foto">Foto (opcional)</label>
+          <label for="fotos">Fotos (Opcional, máx. 3)</label>
           <div class="file-input-container">
             <label class="file-input-label">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -85,13 +85,26 @@
                 <polyline points="21 15 16 10 5 21"></polyline>
               </svg>
               <span>Clique para selecionar uma foto</span>
-              <input type="file" id="foto" accept="image/*">
+              <input
+                      type="file"
+                      id="fotos"
+                      accept="image/*"
+                      multiple
+                      onchange="previewPhotos(event)"
+              >
             </label>
-          </div>
-          <div id="file-preview" class="file-preview">
-            <img id="preview-image" src="#" alt="Preview da imagem">
+            <div id="photo-preview" class="photo-preview-container"></div>
           </div>
           <p class="form-help">Adicione uma foto para ajudar na identificação do problema</p>
+        </div>
+
+        <div class="form-group">
+          <label class="checkbox-container">
+            <input type="checkbox" id="anonimo" name="anonimo">
+            <span class="checkmark"></span>
+            Desejo fazer uma denúncia anônima
+          </label>
+          <p class="form-help">Sua identidade não será vinculada à denúncia</p>
         </div>
 
         <div class="form-group">

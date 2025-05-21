@@ -6,7 +6,7 @@ let currentSearchCenter;
 let currentSearchRadius;
 
 
-function initMap() {
+async function initMap() {
   const initialPosition = { lat: -2.5391, lng: -44.2829 };
   
   const mapOptions = {
@@ -22,7 +22,7 @@ function initMap() {
 
   infoWindow = new google.maps.InfoWindow();
   
-  carregarPontosDenuncia();
+  await carregarPontosDenuncia();
   
   carregarPontosViciados();
   
@@ -31,49 +31,64 @@ function initMap() {
   adicionarCirculoBusca(initialPosition);
 }
 
-function carregarPontosDenuncia() {
-  const denuncias = JSON.parse(localStorage.getItem("ecodenunciaDenuncias") || "[]");
-  
-  denuncias.forEach(denuncia => {
-    if (!denuncia.lat || !denuncia.lng) return;
-    
-    const position = {
-      lat: parseFloat(denuncia.lat),
-      lng: parseFloat(denuncia.lng)
-    };
-    
-    const icon = {
-      url: denuncia.status === "Resolvido" 
-        ? "https://maps.google.com/mapfiles/ms/icons/green-dot.png" 
-        : "https://maps.google.com/mapfiles/ms/icons/red-dot.png",
-      scaledSize: new google.maps.Size(32, 32)
-    };
-    
-    const marker = new google.maps.Marker({
-      position: position,
-      map: map,
-      title: denuncia.endereco || "Endereço não disponível",
-      icon: icon,
-      category: denuncia.status === "Resolvido" ? "resolved" : "pending"
+async function carregarPontosDenuncia() {
+  try {
+    const response = await axios.get(`${API_BASE_URL}/api/denuncia/listarTodos`);
+    const denuncias = response.data;
+
+    denuncias.forEach(denuncia => {
+      if (!denuncia.latitude || !denuncia.longitude) return;
+
+      const position = {
+        lat: denuncia.latitude,
+        lng: denuncia.longitude
+      };
+
+      // 3. Definir ícones por status
+      const icon = {
+        url: denuncia.status === "RESOLVIDO"
+            ? "https://maps.google.com/mapfiles/ms/icons/green-dot.png"
+            : "https://maps.google.com/mapfiles/ms/icons/red-dot.png",
+        scaledSize: new google.maps.Size(32, 32)
+      };
+
+      const marker = new google.maps.Marker({
+        position: position,
+        map: map,
+        title: denuncia.titulo,
+        icon: icon,
+        category: denuncia.status === "RESOLVIDO" ? "resolved" : "pending"
+      });
+
+      // 4. Configurar conteúdo do popup
+      marker.addListener("click", () => {
+        const content = `
+          <div style="padding: 10px; max-width: 300px;">
+            <h3 style="margin: 0 0 5px; color: ${denuncia.status === "RESOLVIDO" ? "#51cf66" : "#ff6b6b"};">${denuncia.titulo}</h3>
+            <p style="margin: 0 0 5px;"><strong>Data:</strong> ${new Date(denuncia.data).toLocaleDateString()}</p>
+            ${!denuncia.anonimo ? `<p style="margin: 0 0 5px;"><strong>Autor:</strong> ${denuncia.usuario.nome}</p>` : ''}
+            <p style="margin: 0 0 5px;"><strong>Local:</strong> Lat ${denuncia.latitude}, Lng ${denuncia.longitude}</p>
+            <p style="margin: 0 0 5px;">${denuncia.descricao}</p>
+            ${denuncia.fotos && denuncia.fotos.length > 0 ?
+            '<div style="margin-top: 10px;">' +
+            denuncia.fotos.map(foto =>
+                `<img src="${foto}" style="width: 100%; margin-bottom: 5px;" alt="Foto da denúncia">`
+            ).join('') +
+            '</div>' : ''}
+          </div>
+        `;
+
+        infoWindow.setContent(content);
+        infoWindow.open(map, marker);
+      });
+
+      markers.push(marker);
     });
-    
-    marker.addListener("click", () => {
-      const content = `
-        <div style="padding: 10px; max-width: 300px;">
-          <h3 style="margin: 0 0 5px; color: ${denuncia.status === "Resolvido" ? "#51cf66" : "#ff6b6b"};">${denuncia.tipo || "Denúncia"}</h3>
-          <p style="margin: 0 0 5px;"><strong>Endereço:</strong> ${denuncia.endereco || "Não disponível"}</p>
-          <p style="margin: 0 0 5px;"><strong>Status:</strong> ${denuncia.status || "Pendente"}</p>
-          <p style="margin: 0 0 5px;"><strong>Data:</strong> ${new Date(denuncia.data).toLocaleDateString()}</p>
-          <p style="margin: 0;">${denuncia.descricao || ""}</p>
-        </div>
-      `;
-      
-      infoWindow.setContent(content);
-      infoWindow.open(map, marker);
-    });
-    
-    markers.push(marker);
-  });
+
+  } catch (error) {
+    console.error("Erro ao carregar denúncias:", error);
+    alert("Erro ao carregar dados do servidor");
+  }
 }
 
 function carregarPontosViciados() {

@@ -192,97 +192,76 @@ function setupForm() {
 
   console.log("Formulário encontrado, configurando event listener");
 
-  form.addEventListener("submit", function (event) {
+  form.addEventListener("submit", async function (event) {
     event.preventDefault();
-    console.log("Formulário enviado");
 
-    const tipoElement = document.getElementById("tipo-denuncia");
-    const descricaoElement = document.getElementById("descricao");
-    const latitudeElement = document.getElementById("latitude");
-    const longitudeElement = document.getElementById("longitude");
-
-    if (
-      !tipoElement ||
-      !descricaoElement ||
-      !latitudeElement ||
-      !longitudeElement
-    ) {
-      console.error("Elementos do formulário não encontrados:", {
-        tipo: !!tipoElement,
-        descricao: !!descricaoElement,
-        latitude: !!latitudeElement,
-        longitude: !!longitudeElement,
-      });
-      alert(
-        "Erro ao processar o formulário. Alguns campos não foram encontrados."
-      );
+    // Obter dados do usuário logado
+    const userData = JSON.parse(localStorage.getItem("ecodenunciaUser"));
+    if (!userData || !userData.token) {
+      alert("Faça login para enviar denúncias");
+      window.location.href = "login.html";
       return;
     }
 
-    const tipo = tipoElement.value;
-    const descricao = descricaoElement.value;
-    const latitude = parseFloat(latitudeElement.value);
-    const longitude = parseFloat(longitudeElement.value);
-
-    const endereco = document.getElementById("endereco")
-      ? document.getElementById("endereco").value
-      : "Endereço não informado";
-
-    const cidade = document.getElementById("cidade")
-      ? document.getElementById("cidade").value
-      : "Cidade não informada";
-
-    console.log("Valores do formulário:", {
-      tipo,
-      descricao,
-      latitude,
-      longitude,
-      endereco,
-      cidade,
-    });
-
-    if (!tipo || !descricao || isNaN(latitude) || isNaN(longitude)) {
-      alert(
-        "Por favor, preencha todos os campos obrigatórios e selecione uma localização no mapa."
-      );
-      return;
-    }
-
-    let foto = null;
-    const previewImage = document.getElementById("preview-image");
-    if (previewImage && previewImage.src && !previewImage.src.endsWith("#")) {
-      foto = previewImage.src;
-    }
-
-    const novaDenuncia = {
-      id: "denuncia-" + Date.now(),
-      tipo: tipo,
-      descricao: descricao,
-      endereco: endereco,
-      cidade: cidade,
-      latitude: latitude,
-      longitude: longitude,
-      data: new Date().toISOString(),
-      status: "Pendente",
-      foto: foto,
+    // Obter dados do formulário
+    const formData = {
+      titulo: document.getElementById("tipo-denuncia").value,
+      descricao: document.getElementById("descricao").value,
+      latitude: parseFloat(document.getElementById("latitude").value),
+      longitude: parseFloat(document.getElementById("longitude").value),
+      anonimo: document.getElementById("anonimo").checked,
+      fotos: []
     };
 
-    console.log("Nova denúncia:", novaDenuncia);
+    // Obter fotos
+    const fotoInput = document.getElementById("foto");
+    const files = fotoInput.files;
+
+    // Validar número de fotos
+    if (files.length > 3) {
+      alert("Máximo de 3 fotos permitidas");
+      return;
+    }
 
     try {
-      const denuncias = JSON.parse(
-        localStorage.getItem("ecodenunciaDenuncias") || "[]"
+      // 1. Enviar denúncia
+      const denunciaResponse = await axios.post(
+          `${API_BASE_URL}/api/usuario/enviarDenuncia/${userData.userId}`,
+          formData,
+          {
+            headers: {
+              Authorization: `Bearer ${userData.token}`,
+              'Content-Type': 'application/json'
+            }
+          }
       );
 
-      denuncias.push(novaDenuncia);
-      localStorage.setItem("ecodenunciaDenuncias", JSON.stringify(denuncias));
+      const denunciaId = denunciaResponse.data.id;
 
-      console.log("Denúncia salva com sucesso");
+      // 2. Enviar fotos se houver
+      if (files.length > 0) {
+        const formDataFotos = new FormData();
+        for (let i = 0; i < files.length; i++) {
+          formDataFotos.append(`foto${i+1}`, files[i]);
+        }
+
+        await axios.post(
+            `${API_BASE_URL}/api/fotos/${denunciaId}`,
+            formDataFotos,
+            {
+              headers: {
+                Authorization: `Bearer ${userData.token}`,
+                'Content-Type': 'multipart/form-data'
+              }
+            }
+        );
+      }
+
       alert("Denúncia enviada com sucesso!");
       window.location.href = "acompanhar.html";
     } catch (error) {
-      console.error("Erro ao salvar denúncia:", error);
-      alert("Ocorreu um erro ao salvar a denúncia: " + error.message);
+      console.error("Erro:", error);
+      alert(`Erro ao enviar denúncia: ${error.response?.data || error.message}`);
     }
   });
 }
@@ -309,5 +288,22 @@ function setupImagePreview() {
     console.log("Preview de imagem configurado");
   } else {
     console.warn("Input de foto não encontrado");
+  }
+}
+
+function previewPhotos(event) {
+  const preview = document.getElementById('photo-preview');
+  preview.innerHTML = '';
+  const files = event.target.files;
+
+  for (let i = 0; i < Math.min(files.length, 3); i++) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const img = document.createElement('img');
+      img.src = e.target.result;
+      img.className = 'photo-preview';
+      preview.appendChild(img);
+    }
+    reader.readAsDataURL(files[i]);
   }
 }
