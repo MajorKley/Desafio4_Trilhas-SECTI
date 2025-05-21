@@ -35,9 +35,12 @@ public class SecurityConfiguration {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/usuario/listarTodos").permitAll()
-                        .requestMatchers("api/usuario/salvar").permitAll()
-                        .requestMatchers("/api/**","/login").permitAll()
-                        .anyRequest().permitAll()
+                        .requestMatchers("/api/usuario/salvar").permitAll()
+                        .requestMatchers("/login").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/denuncia/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/usuario/**").permitAll()
+                        .requestMatchers(HttpMethod.POST,"/api/usuario/enviarDenuncia/**").authenticated()
+                        .anyRequest().denyAll()
                 )
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
