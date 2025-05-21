@@ -36,8 +36,9 @@ async function carregarPontosDenuncia() {
     const response = await axios.get(`${API_BASE_URL}/api/denuncia/listarTodos`);
     const denuncias = response.data;
 
-    denuncias.forEach(denuncia => {
-      if (!denuncia.latitude || !denuncia.longitude) return;
+    for (const denuncia of denuncias) {
+      const autor = await axios.get(`${API_BASE_URL}/api/usuario/buscarNomePorDenunciaId/${denuncia.id_denuncia}`);
+      if (!denuncia.latitude || !denuncia.longitude) continue;
 
       const position = {
         lat: denuncia.latitude,
@@ -66,7 +67,7 @@ async function carregarPontosDenuncia() {
           <div style="padding: 10px; max-width: 300px;">
             <h3 style="margin: 0 0 5px; color: ${denuncia.status === "RESOLVIDO" ? "#51cf66" : "#ff6b6b"};">${denuncia.titulo}</h3>
             <p style="margin: 0 0 5px;"><strong>Data:</strong> ${new Date(denuncia.data).toLocaleDateString()}</p>
-            ${!denuncia.anonimo ? `<p style="margin: 0 0 5px;"><strong>Autor:</strong> ${denuncia.usuario.nome}</p>` : ''}
+            ${!denuncia.anonimo ? `<p style="margin: 0 0 5px;"><strong>Autor:</strong> ${autor.data}</p>` : ''}
             <p style="margin: 0 0 5px;"><strong>Local:</strong> Lat ${denuncia.latitude}, Lng ${denuncia.longitude}</p>
             <p style="margin: 0 0 5px;">${denuncia.descricao}</p>
             ${denuncia.fotos && denuncia.fotos.length > 0 ?
@@ -83,7 +84,7 @@ async function carregarPontosDenuncia() {
       });
 
       markers.push(marker);
-    });
+    }
 
   } catch (error) {
     console.error("Erro ao carregar denúncias:", error);

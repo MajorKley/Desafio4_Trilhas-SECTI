@@ -1,4 +1,4 @@
-const API_BASE_URL = "http://localhost:8080" //backend--ecodenuncia--qfwyz9hxvmc9.code.run
+const API_BASE_URL = API_ENV.API_URL
 
 const SecurityConstants = {
   HEADER_NAME: "Authorization",
