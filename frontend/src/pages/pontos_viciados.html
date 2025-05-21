@@ -105,10 +105,17 @@
   </main>
 
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-  <script src="../js/config.js"></script>
   <script src="../js/main.js"></script>
   <script src="../js/pontos_viciados.js"></script>
-  <script src="https://maps.googleapis.com/maps/api/js?key=GOOGLE_MAPS_API_KEY&libraries=places,geometry&callback=initMap" async defer></script>
+  <script src="../js/config.js"></script>
+  <script>
+    // Carrega a API do Google Maps dinamicamente
+    const script = document.createElement('script');
+    script.src = `https://maps.googleapis.com/maps/api/js?key=${window.APP_CONFIG.GOOGLE_MAPS_API_KEY}&libraries=places,geometry&callback=initMap`;
+    script.async = true;
+    script.defer = true;
+    document.head.appendChild(script);
+  </script>
 </body>
 
 </html>

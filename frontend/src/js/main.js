@@ -1,5 +1,3 @@
-const API_BASE_URL = API_ENV.API_URL
-
 const SecurityConstants = {
   HEADER_NAME: "Authorization",
 };
@@ -91,7 +89,7 @@ function setupLoginForms() {
       return;
     }
 
-    axios.post(`${API_BASE_URL}/login`, {
+    axios.post(`${window.APP_CONFIG.API_URL}/login`, {
       email: email,
       senha: password
     }, {
@@ -149,7 +147,7 @@ function setupLoginForms() {
       return;
     }
 
-    axios.post(`${API_BASE_URL}/api/usuario/salvar`, {
+    axios.post(`${window.APP_CONFIG.API_URL}/api/usuario/salvar`, {
       nome: nome,
       email: email,
       senha: password

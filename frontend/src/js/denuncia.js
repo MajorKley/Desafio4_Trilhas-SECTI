@@ -226,7 +226,7 @@ function setupForm() {
     try {
       // 1. Enviar denúncia
       const denunciaResponse = await axios.post(
-          `${API_BASE_URL}/api/usuario/enviarDenuncia/${userData.userId}`,
+          `${window.APP_CONFIG.API_URL}/api/usuario/enviarDenuncia/${userData.userId}`,
           formData,
           {
             headers: {
@@ -246,7 +246,7 @@ function setupForm() {
         }
 
         await axios.post(
-            `${API_BASE_URL}/api/fotos/${denunciaId}`,
+            `${window.APP_CONFIG.API_URL}/api/fotos/${denunciaId}`,
             formDataFotos,
             {
               headers: {

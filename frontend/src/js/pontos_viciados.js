@@ -33,11 +33,11 @@ async function initMap() {
 
 async function carregarPontosDenuncia() {
   try {
-    const response = await axios.get(`${API_BASE_URL}/api/denuncia/listarTodos`);
+    const response = await axios.get(`${window.APP_CONFIG.API_URL}/api/denuncia/listarTodos`);
     const denuncias = response.data;
 
     for (const denuncia of denuncias) {
-      const autor = await axios.get(`${API_BASE_URL}/api/usuario/buscarNomePorDenunciaId/${denuncia.id_denuncia}`);
+      const autor = await axios.get(`${window.APP_CONFIG.API_URL}/api/usuario/buscarNomePorDenunciaId/${denuncia.id_denuncia}`);
       if (!denuncia.latitude || !denuncia.longitude) continue;
 
       const position = {
