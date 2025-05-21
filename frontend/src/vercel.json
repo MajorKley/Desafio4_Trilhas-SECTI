@@ -5,9 +5,5 @@
       "GOOGLE_MAPS_API_KEY": "GOOGLE_MAPS_API_KEY"
     },
     "output": "."
-  },
-  "routes": [
-    { "handle": "filesystem" },
-    { "src": "/.*", "dest": "/index.html" }
-  ]
+  }
 }
