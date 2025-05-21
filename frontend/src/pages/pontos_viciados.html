@@ -8,7 +8,6 @@
   <link rel="stylesheet" href="../css/main.css">
   <link rel="stylesheet" href="../css/components.css">
   <link rel="stylesheet" href="../css/pages/pontos_viciados.css">
-  <script src="../js/config.js"></script>
 </head>
 
 <body>
@@ -105,14 +104,26 @@
     </div>
   </main>
 
+  <script src="../js/config.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <script src="../js/main.js"></script>
-  <script>
-    const script = document.createElement('script');
-    script.src = `https://maps.googleapis.com/maps/api/js?key=${window.APP_CONFIG.GOOGLE_MAPS_API_KEY}&libraries=places,geometry&callback=initMap`;
-    document.head.appendChild(script);
-  </script>
   <script src="../js/pontos_viciados.js"></script>
+  <script>
+    function initializeMap() {
+      const script = document.createElement('script');
+      script.src = `https://maps.googleapis.com/maps/api/js?key=${window.APP_CONFIG.GOOGLE_MAPS_API_KEY}&libraries=places,geometry&callback=initMap`;
+      script.async = true;
+      script.defer = true;
+      document.head.appendChild(script);
+    }
+
+    // Garanta que o config.js foi carregado
+    if(window.APP_CONFIG) {
+      initializeMap();
+    } else {
+      window.addEventListener('APP_CONFIG_READY', initializeMap);
+    }
+  </script>
 </body>
 
 </html>
