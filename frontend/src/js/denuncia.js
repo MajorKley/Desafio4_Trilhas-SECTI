@@ -236,7 +236,8 @@ function setupForm() {
           }
       );
 
-      const denunciaId = denunciaResponse.data.id;
+      console.log(denunciaResponse.data);
+      const denunciaId = denunciaResponse.data?.id_denuncia;
 
       // 2. Enviar fotos se houver
       if (files.length > 0) {

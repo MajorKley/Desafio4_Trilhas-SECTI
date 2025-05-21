@@ -65,7 +65,7 @@ async function carregarPontosDenuncia() {
       // 4. Configurar conteúdo do popup
       geocoder.geocode({ location: position }, (results, status) => {
         let endereco = "Endereço não encontrado";
-
+        console.log("chegou aqui")
         if (status === "OK" && results[0]) {
           endereco = results[0].formatted_address;
           marker.setTitle(endereco);
