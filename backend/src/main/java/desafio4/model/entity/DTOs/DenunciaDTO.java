@@ -23,6 +23,7 @@ public class DenunciaDTO {
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate data;
     private Status status;
+    private Set<Fotos> fotos;
 }
 
 

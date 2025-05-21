@@ -1,5 +1,6 @@
 package desafio4.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -32,5 +33,6 @@ public class Fotos implements Serializable{
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "id_denuncia")
+    @JsonIgnore
     private Denuncia denuncia;
 }
