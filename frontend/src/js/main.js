@@ -100,6 +100,7 @@ function setupLoginForms() {
     .then(response => {
       const token = response.headers[SecurityConstants.HEADER_NAME.toLowerCase()];
       const userData = response.data.user;
+      console.log(userData);
 
 
       // Armazenar token e dados do usuário
@@ -107,7 +108,8 @@ function setupLoginForms() {
         email: userData.email,
         role: userData.role,
         loggedIn: true,
-        token: token
+        token: token,
+        userId: userData.id
       }));
 
       alert("Login realizado com sucesso!");

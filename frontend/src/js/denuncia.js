@@ -214,7 +214,7 @@ function setupForm() {
     };
 
     // Obter fotos
-    const fotoInput = document.getElementById("foto");
+    const fotoInput = document.getElementById("fotos");
     const files = fotoInput.files;
 
     // Validar número de fotos
@@ -242,7 +242,7 @@ function setupForm() {
       if (files.length > 0) {
         const formDataFotos = new FormData();
         for (let i = 0; i < files.length; i++) {
-          formDataFotos.append(`foto${i+1}`, files[i]);
+          formDataFotos.append(`foto${i + 1}`, files[i]);
         }
 
         await axios.post(

@@ -32,6 +32,7 @@ async function initMap() {
 }
 
 async function carregarPontosDenuncia() {
+  const geocoder = new google.maps.Geocoder();
   try {
     const response = await axios.get(`${window.APP_CONFIG.API_URL}/api/denuncia/listarTodos`);
     const denuncias = response.data;
@@ -62,25 +63,34 @@ async function carregarPontosDenuncia() {
       });
 
       // 4. Configurar conteúdo do popup
-      marker.addListener("click", () => {
-        const content = `
+      geocoder.geocode({ location: position }, (results, status) => {
+        let endereco = "Endereço não encontrado";
+
+        if (status === "OK" && results[0]) {
+          endereco = results[0].formatted_address;
+          marker.setTitle(endereco);
+        }
+
+        marker.addListener("click", () => {
+          const content = `
           <div style="padding: 10px; max-width: 300px;">
             <h3 style="margin: 0 0 5px; color: ${denuncia.status === "RESOLVIDO" ? "#51cf66" : "#ff6b6b"};">${denuncia.titulo}</h3>
             <p style="margin: 0 0 5px;"><strong>Data:</strong> ${new Date(denuncia.data).toLocaleDateString()}</p>
             ${!denuncia.anonimo ? `<p style="margin: 0 0 5px;"><strong>Autor:</strong> ${autor.data}</p>` : ''}
-            <p style="margin: 0 0 5px;"><strong>Local:</strong> Lat ${denuncia.latitude}, Lng ${denuncia.longitude}</p>
-            <p style="margin: 0 0 5px;">${denuncia.descricao}</p>
+            <p style="margin: 0 0 5px;"><strong>Local:</strong> ${endereco}</p>
+            <p style="margin: 0 0 5px;"><strong>Descrição:</strong> ${denuncia.descricao}</p>
             ${denuncia.fotos && denuncia.fotos.length > 0 ?
-            '<div style="margin-top: 10px;">' +
-            denuncia.fotos.map(foto =>
-                `<img src="${foto}" style="width: 100%; margin-bottom: 5px;" alt="Foto da denúncia">`
-            ).join('') +
-            '</div>' : ''}
+              '<div style="margin-top: 10px;">' +
+              denuncia.fotos.map(foto =>
+                  `<img src="${foto}" style="width: 100%; margin-bottom: 5px;" alt="Foto da denúncia">`
+              ).join('') +
+              '</div>' : ''}
           </div>
         `;
 
-        infoWindow.setContent(content);
-        infoWindow.open(map, marker);
+          infoWindow.setContent(content);
+          infoWindow.open(map, marker);
+        });
       });
 
       markers.push(marker);
