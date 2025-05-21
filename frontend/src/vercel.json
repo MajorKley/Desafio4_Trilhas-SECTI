@@ -1,0 +1,12 @@
+{
+  "build": {
+    "env": {
+      "API_URL": "API_URL_ENV",
+      "GOOGLE_MAPS_API_KEY": "GOOGLE_MAPS_API_KEY_ENV"
+    }
+  },
+  "env": {
+    "API_URL": "API_URL_ENV",
+    "GOOGLE_MAPS_API_KEY": "GOOGLE_MAPS_API_KEY_ENV"
+  }
+}
