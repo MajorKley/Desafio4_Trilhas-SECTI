@@ -66,6 +66,7 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
                 .setSubject(id)
                 .claim("email", email)
                 .claim("role", role)
+                .claim("id", id)
                 .setExpiration(new Date(System.currentTimeMillis() + SecurityConstants.EXPIRATION_TIME))
                 .signWith(SecurityConstants.KEY)
                 .compact();
@@ -74,10 +75,11 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
         String jsonResponse = String.format(
-                "{\"token\": \"%s\", \"user\": {\"email\": \"%s\", \"role\": \"%s\"}}",
+                "{\"token\": \"%s\", \"user\": {\"email\": \"%s\", \"role\": \"%s\", \"id\": \"%s\"}}",
                 token,
                 email,
-                role
+                role,
+                id
         );
 
         response.getWriter().write(jsonResponse);
