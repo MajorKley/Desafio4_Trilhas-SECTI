@@ -81,6 +81,12 @@ public class UsuarioService implements UserDetailsService {
         return lista;
     }
 
+    public String buscarNomePorDenunciaId(UUID id) {
+        denunciaService.buscarPorId(id);
+        String usuario = repo.findNomeByDenunciaId(id);
+        return usuario;
+    }
+
     @Transactional
     public List<Usuario> listarTodos() {
         List<Usuario> lista = repo.findAll();

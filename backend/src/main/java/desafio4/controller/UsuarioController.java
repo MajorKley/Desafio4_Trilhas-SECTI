@@ -131,6 +131,17 @@ public class UsuarioController {
         }
     }
 
+    @GetMapping("/buscarNomePorDenunciaId/{denunciaId}")
+    public ResponseEntity buscarNomePorDenunciaId(@PathVariable UUID denunciaId) {
+        try {
+            String nome = usuarioService.buscarNomePorDenunciaId(denunciaId);
+            return ResponseEntity.ok(nome);
+
+        } catch (RegraNegocioRunTime | BuscaVaziaRunTime e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
+
     @GetMapping("/listarTodos")
     public ResponseEntity listarTodos() {
         try {
