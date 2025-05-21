@@ -1,4 +1,4 @@
-const API_BASE_URL = "https://eco-denuncia.up.railway.app";
+const API_BASE_URL = "http://localhost:8080" //desafio4trilhas-secti-production.up.railway.app;
 
 const SecurityConstants = {
   HEADER_NAME: "Authorization",
