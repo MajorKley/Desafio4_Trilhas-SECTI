@@ -116,23 +116,7 @@
 
   <script src="../js/main.js"></script>
   <script src="../js/denuncia.js"></script>
-  <script>
-    // script p preview da img
-    document.getElementById('foto').addEventListener('change', function (e) {
-      const file = e.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = function (event) {
-          const img = document.getElementById('preview-image');
-          img.src = event.target.result;
-          document.getElementById('file-preview').style.display = 'block';
-        }
-        reader.readAsDataURL(file);
-      }
-    });
-  </script>
-
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCL0fItqeFqloFHLU5pi4ALvEFuAaIqy7Y&callback=initMap" async defer></script>
+  <script src=`https://maps.googleapis.com/maps/api/js?key=GOOGLE_MAPS_API_KEY&callback=initMap` async defer></script>
 
   <script>
     let map;
