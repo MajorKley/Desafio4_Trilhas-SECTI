@@ -1,2 +1,5 @@
 /.idea/
 /frontend/src/js/config.js
+node_modules/
+.env
+config.js
