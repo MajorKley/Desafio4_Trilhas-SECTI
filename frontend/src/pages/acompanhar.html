@@ -83,10 +83,6 @@
             <div id="modal-endereco" class="info-value">Carregando...</div>
           </div>
           <div class="info-row">
-            <div class="info-label">Cidade:</div>
-            <div id="modal-cidade" class="info-value">Carregando...</div>
-          </div>
-          <div class="info-row">
             <div class="info-label">Status:</div>
             <div id="modal-status" class="info-value">Carregando...</div>
           </div>
@@ -103,11 +99,9 @@
             <div class="info-label">Descrição:</div>
             <div id="modal-descricao" class="info-value descricao">Carregando...</div>
           </div>
-          <div id="modal-foto-container" class="info-row full foto-container" style="display: none;">
-            <div class="info-label">Foto:</div>
-            <div class="info-value">
-              <img id="modal-foto" src="/placeholder.svg" alt="Foto da denúncia">
-            </div>
+          <div id="modal-foto-container" class="info-row full foto-container">
+            <div class="info-label">Fotos:</div>
+            <div class="info-value"></div>
           </div>
         </div>
       </div>
@@ -117,9 +111,26 @@
     </div>
   </div>
 
+  <script src="../js/config.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <script src="../js/main.js"></script>
   <script src="../js/acompanhar.js"></script>
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCL0fItqeFqloFHLU5pi4ALvEFuAaIqy7Y&callback=initMap" async defer></script>
+  <script>
+    function initializeMap() {
+      const script = document.createElement('script');
+      script.src = `https://maps.googleapis.com/maps/api/js?key=${window.APP_CONFIG.GOOGLE_MAPS_API_KEY}&libraries=places,geometry&callback=initMap`;
+      script.async = true;
+      script.defer = true;
+      document.head.appendChild(script);
+    }
+
+    // Garanta que o config.js foi carregado
+    if(window.APP_CONFIG) {
+      initializeMap();
+    } else {
+      window.addEventListener('APP_CONFIG_READY', initializeMap);
+    }
+  </script>
 </body>
 
 </html>

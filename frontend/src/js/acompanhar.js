@@ -120,81 +120,130 @@ function adicionarDenunciasExemplo() {
   );
 }
 
-function carregarDenuncias() {
-  const denuncias = JSON.parse(
-    localStorage.getItem("ecodenunciaDenuncias") || "[]"
-  );
-  const denunciasPendentes = document.querySelector(".denuncias-pendentes");
-  const denunciasResolvidas = document.querySelector(".denuncias-resolvidas");
+async function carregarDenuncias() {
+  const user = localStorage.getItem("ecodenunciaUser");
+  const userData = JSON.parse(user);
+  const userId = userData.userId;
 
-  // limpar conteúdo atual
-  denunciasPendentes.innerHTML = "";
-  denunciasResolvidas.innerHTML = "";
-
-  if (denuncias.length === 0) {
-    denunciasPendentes.innerHTML =
-      "<p class='sem-denuncias'>Você ainda não possui denúncias registradas.</p>";
+  if (!userId) {
+    window.location.href = "login.html";
     return;
   }
 
-  const pendentes = denuncias.filter((d) => d.status !== "Resolvido");
-  const resolvidas = denuncias.filter((d) => d.status === "Resolvido");
+  try {
+    const response = await axios.get(`${window.APP_CONFIG.API_URL}/api/denuncia/buscarPorUsuario/${userId}`);
+    const denuncias = response.data.map(d => ({
+      ...d,
+      id: d.id_denuncia,
+      fotos: d.fotos,
+      // Converter status
+      status: d.status === "RESOLVIDO" ? "Resolvido" : "Pendente",
+      endereco: "Carregando..." // Será preenchido pela geocodificação
+    }));
 
-  // renderiza as denúncias pendentes
+    await processarGeocodificacao(denuncias);
+    renderizarDenuncias(denuncias);
+  } catch (error) {
+    console.error("Erro detalhado:", error.response?.data || error.message);
+    alert("Erro ao carregar denúncias");
+  }
+}
+
+async function processarGeocodificacao(denuncias) {
+  const geocoder = new google.maps.Geocoder();
+
+  for (const denuncia of denuncias) {
+    if (denuncia.latitude && denuncia.longitude) {
+      try {
+        const response = await new Promise((resolve, reject) => {
+          geocoder.geocode(
+              { location: { lat: denuncia.latitude, lng: denuncia.longitude } },
+              (results, status) => status === "OK" ? resolve(results) : reject(status)
+          );
+        });
+
+        denuncia.endereco = response[0]?.formatted_address || "Endereço não encontrado";
+      } catch {
+        denuncia.endereco = "Erro ao geocodificar";
+      }
+    } else {
+      denuncia.endereco = "Coordenadas não disponíveis";
+    }
+  }
+}
+
+function renderizarDenuncias(denuncias) {
+  const pendentesContainer = document.querySelector(".denuncias-pendentes");
+  const resolvidasContainer = document.querySelector(".denuncias-resolvidas");
+
+  // Limpar containers
+  pendentesContainer.innerHTML = "";
+  resolvidasContainer.innerHTML = "";
+
+  // Separar denúncias
+  const pendentes = denuncias.filter(d => d.status === "Pendente");
+  const resolvidas = denuncias.filter(d => d.status === "Resolvido");
+
+  // Renderizar pendentes
   if (pendentes.length === 0) {
-    denunciasPendentes.innerHTML =
-      "<p class='sem-denuncias'>Não há denúncias pendentes.</p>";
+    pendentesContainer.innerHTML = "<p class='sem-denuncias'>Não há denúncias pendentes.</p>";
   } else {
-    pendentes.forEach((denuncia) => {
-      denunciasPendentes.appendChild(criarCardDenuncia(denuncia, false));
+    pendentes.forEach(denuncia => {
+      pendentesContainer.appendChild(criarCardDenuncia(denuncia, false));
     });
   }
 
-  // renderiza as denúncias resolvidas
+  // Renderizar resolvidas
   if (resolvidas.length === 0) {
-    denunciasResolvidas.innerHTML =
-      "<p class='sem-denuncias'>Não há denúncias resolvidas.</p>";
+    resolvidasContainer.innerHTML = "<p class='sem-denuncias'>Não há denúncias resolvidas.</p>";
   } else {
-    resolvidas.forEach((denuncia) => {
-      denunciasResolvidas.appendChild(criarCardDenuncia(denuncia, true));
+    resolvidas.forEach(denuncia => {
+      resolvidasContainer.appendChild(criarCardDenuncia(denuncia, true));
     });
+  }
+
+  // Atualizar mapa se necessário
+  if (document.getElementById("map-view").style.display === "block") {
+    carregarDenunciasNoMapa();
   }
 }
 
 function criarCardDenuncia(denuncia, resolvida) {
-  const data = new Date(denuncia.data);
-  const dataFormatada = `${data.getDate().toString().padStart(2, "0")}/${(
-    data.getMonth() + 1
-  )
-    .toString()
-    .padStart(2, "0")}/${data.getFullYear().toString().slice(2)}`;
-  const horaFormatada = `${data.getHours().toString().padStart(2, "0")}:${data
-    .getMinutes()
-    .toString()
-    .padStart(2, "0")}h`;
+  // Ajuste na formatação da data (assumindo que a API envia ISO string)
+  const dataArray = denuncia.data;
+  const data = new Date(dataArray[0], dataArray[1] - 1, dataArray[2]);
+  const dataFormatada = `${data.getDate().toString().padStart(2, "0")}/${(data.getMonth() + 1)
+      .toString()
+      .padStart(2, "0")}/${data.getFullYear().toString().slice(2)}`;
 
   const card = document.createElement("div");
   card.className = `denuncia-card ${resolvida ? "resolvida" : "pendente"}`;
-  card.dataset.id = denuncia.id; 
+  card.dataset.id = denuncia.id;
+
+  // Gerar miniaturas das fotos
+  const fotosHTML = denuncia.fotos ? Object.entries(denuncia.fotos)
+      .filter(([key]) => key.startsWith('foto'))
+      .map(([_, value]) => `
+      <img src="data:image/jpeg;base64,${value}" alt="Foto da denúncia" class="denuncia-thumb">
+    `).join('') : '';
 
   card.innerHTML = `
     <div class="card-content">
       <div class="card-info">
-        <h3 class="local-nome">${denuncia.endereco || "Nome do Local"}</h3>
-        <p class="tipo-denuncia">${denuncia.tipo || "Tipo não especificado"}</p>
-        <p class="data-hora"><span>${dataFormatada}</span> • <span>${horaFormatada}</span></p>
+        <h3 class="local-nome">${denuncia.endereco || "Local não identificado"}</h3>
+        <p class="tipo-denuncia">${denuncia.titulo || "Sem título"}</p>
+        <p class="data-hora">${dataFormatada}</p>
+        ${fotosHTML ? `<div class="denuncia-thumbs">${fotosHTML}</div>` : ''}
       </div>
       <div class="card-status">
-        ${
-          resolvida
-            ? `<span class="status-indicator resolvido">
+        ${resolvida ? `
+          <span class="status-indicator resolvido">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <polyline points="20 6 9 17 4 12"></polyline>
             </svg>
             Resolvido
-          </span>`
-            : `<span class="status-indicator">Pendente</span>`
-        }
+          </span>` :
+      `<span class="status-indicator">Pendente</span>`}
       </div>
     </div>
     <div class="card-actions">
@@ -239,6 +288,11 @@ function setupModal() {
   const closeBtn = document.querySelector(".modal-close");
   const alternarStatusBtn = document.getElementById("modal-alternar-status");
 
+  document.querySelector('.modal-close').addEventListener('click', () => {
+    modal.style.display = 'none';
+    // Mantém os elementos no DOM
+  });
+
   closeBtn.addEventListener("click", () => {
     modal.style.display = "none";
   });
@@ -259,136 +313,187 @@ function setupModal() {
   });
 }
 
-function visualizarDenuncia(id) {
-  const denuncias = JSON.parse(
-    localStorage.getItem("ecodenunciaDenuncias") || "[]"
-  );
-  const denuncia = denuncias.find((d) => d.id === id); 
+async function visualizarDenuncia(id) {
+  try {
+    const response = await axios.get(`${window.APP_CONFIG.API_URL}/api/denuncia/buscarPorId/${id}`);
+    const denuncia = response.data;
 
-  if (!denuncia) {
-    alert("Denúncia não encontrada!");
-    return;
-  }
-
-  const modal = document.getElementById("denuncia-modal");
-  modal.dataset.denunciaId = denuncia.id;
-
-  document.getElementById("modal-tipo").textContent =
-    denuncia.tipo || "Não especificado";
-  document.getElementById("modal-endereco").textContent =
-    denuncia.endereco || "Não especificado";
-  document.getElementById("modal-cidade").textContent =
-    denuncia.cidade || "Não especificada";
-
-  const statusElement = document.getElementById("modal-status");
-  statusElement.textContent = denuncia.status || "Pendente";
-  statusElement.className = `info-value ${
-    denuncia.status === "Resolvido" ? "text-green-600" : "text-red-600"
-  }`;
-
-  document.getElementById("modal-data").textContent = new Date(
-    denuncia.data
-  ).toLocaleString();
-  document.getElementById("modal-descricao").textContent =
-    denuncia.descricao || "Sem descrição";
-
-  // adiciona coordenadas ao modal
-  if (document.getElementById("modal-coordenadas")) {
-    if (denuncia.latitude && denuncia.longitude) {
-      document.getElementById("modal-coordenadas").textContent = `${parseFloat(
-        denuncia.latitude
-      ).toFixed(6)}, ${parseFloat(denuncia.longitude).toFixed(6)}`;
-    } else {
-      document.getElementById("modal-coordenadas").textContent =
-        "Não disponível";
+    if (!denuncia) {
+      alert("Denúncia não encontrada!");
+      return;
     }
+
+    // Converter estrutura do JSON recebido
+    const denunciaAdaptada = {
+      id: denuncia.id_denuncia,
+      titulo: denuncia.titulo,
+      descricao: denuncia.descricao,
+      latitude: denuncia.latitude,
+      longitude: denuncia.longitude,
+      status: denuncia.status === "RESOLVIDO" ? "Resolvido" : "Pendente",
+      data: new Date(denuncia.data[0], denuncia.data[1] - 1, denuncia.data[2]),
+      fotos: denuncia.fotos || null
+    };
+
+    const modal = document.getElementById('denuncia-modal');
+
+    // Garantir que o modal existe
+    if (!modal) {
+      console.error('Modal não encontrado');
+      return;
+    }
+
+    // Obter elementos DENTRO do modal
+    const fotoContainer = modal.querySelector('#modal-foto-container');
+    let fotosContent = modal.querySelector('.info-value');
+
+    // Reset seguro
+    if (fotosContent) {
+      fotosContent.innerHTML = '';
+    } else {
+      console.warn('Container de fotos não encontrado, criando novo...');
+      const newContent = document.createElement('div');
+      newContent.className = 'info-value';
+      fotoContainer.appendChild(newContent);
+      fotosContent = newContent;
+    }
+
+    // Listar todas as fotos disponíveis
+    if (denunciaAdaptada.fotos) {
+      // Converter o objeto de fotos em array e filtrar entradas válidas
+      const fotosArray = Object.entries(denunciaAdaptada.fotos)
+          .filter(([key, value]) => key.startsWith('foto') && value)
+          .map(([_, value]) => value);
+
+      if (fotosArray.length > 0) {
+        fotoContainer.style.display = "block";
+        fotosArray.forEach((foto, index) => {
+          const imgWrapper = document.createElement('div');
+          imgWrapper.className = 'foto-wrapper';
+          imgWrapper.innerHTML = `
+            <img src="data:image/jpeg;base64,${foto}" 
+                 alt="Foto ${index + 1} da denúncia" 
+                 class="modal-foto"
+                 onclick="ampliarFoto(this)">
+            <span class="foto-indicator">Foto ${index + 1}</span>
+          `;
+          fotosContent.appendChild(imgWrapper);
+        });
+      }
+    }
+
+    // Atualizar conteúdo do modal
+    document.getElementById("modal-tipo").textContent = denunciaAdaptada.titulo;
+    document.getElementById("modal-descricao").textContent = denunciaAdaptada.descricao;
+    document.getElementById("modal-coordenadas").textContent =
+        `${denunciaAdaptada.latitude?.toFixed(6)}, ${denunciaAdaptada.longitude?.toFixed(6)}`;
+
+    // Geocodificação em tempo real para o endereço
+    if (denunciaAdaptada.latitude && denunciaAdaptada.longitude) {
+      document.getElementById("modal-endereco").textContent = "Buscando endereço...";
+
+      new google.maps.Geocoder().geocode(
+          { location: { lat: denunciaAdaptada.latitude, lng: denunciaAdaptada.longitude } },
+          (results, status) => {
+            document.getElementById("modal-endereco").textContent =
+                status === "OK" ? results[0]?.formatted_address : "Endereço não encontrado";
+          }
+      );
+    } else {
+      document.getElementById("modal-endereco").textContent = "Coordenadas não disponíveis";
+    }
+
+    // Atualizar status
+    const statusElement = document.getElementById("modal-status");
+    statusElement.textContent = denunciaAdaptada.status;
+    statusElement.className = `info-value ${denunciaAdaptada.status === "Resolvido" ? "text-green-600" : "text-red-600"}`;
+
+    // Atualizar data
+    document.getElementById("modal-data").textContent = denunciaAdaptada.data.toLocaleDateString('pt-BR', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+
+    // Atualizar fotos no modal
+    const fotosContainer = document.getElementById("modal-foto-container");
+    fotosContainer.innerHTML = ''; // Limpar fotos antigas
+
+    if (denunciaAdaptada.fotos) {
+      Object.entries(denunciaAdaptada.fotos).forEach(([key, value]) => {
+        if (key.startsWith('foto') && value) {
+          const img = document.createElement('img');
+          img.src = `data:image/jpeg;base64,${value}`;
+          img.className = 'modal-foto';
+          fotosContainer.appendChild(img);
+        }
+      });
+      fotosContainer.style.display = "block";
+    } else {
+      fotosContainer.style.display = "none";
+    }
+
+    // Configurar botão de alternância
+    const alternarStatusBtn = document.getElementById("modal-alternar-status");
+    alternarStatusBtn.textContent = denunciaAdaptada.status === "Resolvido"
+        ? "Marcar como Pendente"
+        : "Marcar como Resolvido";
+
+    alternarStatusBtn.className = denunciaAdaptada.status === "Resolvido"
+        ? "btn btn-accent"
+        : "btn btn-primary";
+
+    modal.style.display = "block";
+
+  } catch (error) {
+    console.error("Erro ao visualizar denúncia:", error.response?.data || error.message);
+    alert("Erro ao carregar detalhes da denúncia");
   }
-
-  // verificação de existência de foto
-  const fotoContainer = document.getElementById("modal-foto-container");
-  if (denuncia.foto) {
-    document.getElementById("modal-foto").src = denuncia.foto;
-    fotoContainer.style.display = "block";
-  } else {
-    fotoContainer.style.display = "none";
-  }
-
-
-  const alternarStatusBtn = document.getElementById("modal-alternar-status");
-  alternarStatusBtn.textContent =
-    denuncia.status === "Resolvido"
-      ? "Marcar como Pendente"
-      : "Marcar como Resolvido";
-
- 
-  alternarStatusBtn.className =
-    denuncia.status === "Resolvido"
-      ? "btn btn-accent" 
-      : "btn btn-primary"; 
-
-  modal.style.display = "block";
 }
 
-function alternarStatusDenuncia(id) {
-  const denuncias = JSON.parse(
-    localStorage.getItem("ecodenunciaDenuncias") || "[]"
-  );
-  const index = denuncias.findIndex((d) => d.id === id);
+window.ampliarFoto = function(imgElement) {
+  const overlay = document.createElement('div');
+  overlay.className = 'foto-overlay';
+  overlay.onclick = (e) => {
+    if (e.target === overlay) overlay.remove();
+  };
 
-  if (index === -1) {
-    alert("Denúncia não encontrada!");
-    return;
-  }
+  const imgAmpliada = document.createElement('img');
+  imgAmpliada.src = imgElement.src;
+  imgAmpliada.className = 'foto-ampliada';
 
-  denuncias[index].status =
-    denuncias[index].status === "Resolvido" ? "Pendente" : "Resolvido";
+  const btnFechar = document.createElement('button');
+  btnFechar.className = 'btn-fechar';
+  btnFechar.innerHTML = '×';
+  btnFechar.onclick = () => overlay.remove();
 
-  localStorage.setItem("ecodenunciaDenuncias", JSON.stringify(denuncias));
+  overlay.appendChild(imgAmpliada);
+  overlay.appendChild(btnFechar);
+  document.body.appendChild(overlay);
+};
 
- 
-  const card = document.querySelector(`.denuncia-card[data-id="${id}"]`);
-  if (card) {
-    if (denuncias[index].status === "Resolvido") {
-      card.classList.remove("pendente");
-      card.classList.add("resolvida");
+async function alternarStatusDenuncia(id) {
+  try {
+    // Buscar denúncia atual primeiro
+    const response = await axios.get(`${window.APP_CONFIG.API_URL}/api/denuncia/buscarPorId/${id}`);
+    const denunciaAtual = response.data;
 
-      const resolvidasContainer = document.querySelector(
-        ".denuncias-resolvidas"
-      );
-      if (resolvidasContainer) {
-        resolvidasContainer.appendChild(card);
-      }
-    } else {
-      card.classList.remove("resolvida");
-      card.classList.add("pendente");
+    const novoStatus = denunciaAtual.status === "RESOLVIDO" ? "ENVIADO" : "RESOLVIDO";
 
-      const pendentesContainer = document.querySelector(".denuncias-pendentes");
-      if (pendentesContainer) {
-        pendentesContainer.appendChild(card);
-      }
-    }
+    await axios.put(`${window.APP_CONFIG.API_URL}/api/denuncia/${id}`, {
+      status: novoStatus
+    }, {
+      headers: { 'Content-Type': 'application/json' }
+    });
 
-    const statusIndicator = card.querySelector(".status-indicator");
-    if (statusIndicator) {
-      if (denuncias[index].status === "Resolvido") {
-        statusIndicator.classList.add("resolvido");
-        statusIndicator.innerHTML = `
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="20 6 9 17 4 12"></polyline>
-          </svg>
-          Resolvido
-        `;
-      } else {
-        statusIndicator.classList.remove("resolvido");
-        statusIndicator.textContent = "Pendente";
-      }
-    }
-  }
+    carregarDenuncias();
+    if (mapInitialized) carregarDenunciasNoMapa();
 
-  carregarDenuncias();
-
-  if (typeof denunciasMap !== "undefined" && denunciasMap !== null) {
-    carregarDenunciasNoMapa();
+  } catch (error) {
+    console.error("Erro na alternância:", error.response?.data || error.message);
+    alert("Erro ao atualizar status");
   }
 }
 
@@ -445,73 +550,68 @@ function initMap() {
   carregarDenunciasNoMapa();
 }
 
-function carregarDenunciasNoMapa() {
-  const denuncias = JSON.parse(
-    localStorage.getItem("ecodenunciaDenuncias") || "[]"
-  );
+async function carregarDenunciasNoMapa() {
+  try {
+    const response = await axios.get(`${window.APP_CONFIG.API_URL}/api/denuncia/listarTodos`);
+    const denuncias = response.data;
 
-  if (denuncias.length === 0) {
-    alert("Não há denúncias para exibir no mapa.");
-    return;
-  }
+    markers.forEach(marker => marker.setMap(null));
+    markers = [];
+    const bounds = new google.maps.LatLngBounds();
 
-  markers.forEach((marker) => marker.setMap(null));
-  markers = [];
-  
-  const bounds = new google.maps.LatLngBounds();
+    for (const denuncia of denuncias) {
+      // Verificar e converter coordenadas
+      const lat = parseFloat(denuncia.latitude);
+      const lng = parseFloat(denuncia.longitude);
 
-  denuncias.forEach((denuncia) => {
-    if (!denuncia.latitude || !denuncia.longitude) {
-      denuncia.latitude = -2.5391 + (Math.random() * 0.05 - 0.025);
-      denuncia.longitude = -44.2829 + (Math.random() * 0.05 - 0.025);
+      if (isNaN(lat) || isNaN(lng)) {
+        console.warn('Coordenadas inválidas:', denuncia.id_denuncia);
+        continue;
+      }
+
+      const position = { lat, lng };
+
+      // Criar marcador
+      const marker = new google.maps.Marker({
+        position,
+        map: denunciasMap,
+        title: denuncia.titulo,
+        icon: {
+          url: denuncia.status === "RESOLVIDO"
+              ? "https://maps.google.com/mapfiles/ms/icons/green-dot.png"
+              : "https://maps.google.com/mapfiles/ms/icons/red-dot.png",
+          scaledSize: new google.maps.Size(32, 32)
+        }
+      });
+
+      // InfoWindow com geocodificação
+      const infoWindow = new google.maps.InfoWindow({
+        content: `
+    <div class="map-infowindow">
+      <h3>${denuncia.titulo}</h3>
+      <p><strong>Status:</strong> ${denuncia.status === "RESOLVIDO" ? "Resolvido" : "Pendente"}</p>
+      ${denuncia.descricao ? `<p>${denuncia.descricao.substring(0, 50)}...</p>` : ''}
+      <button onclick="visualizarDenuncia('${denuncia.id_denuncia}')">
+        Ver detalhes
+      </button>
+    </div>
+  `
+      });
+
+      marker.addListener('click', () => infoWindow.open(denunciasMap, marker));
+      markers.push(marker);
+      bounds.extend(position);
     }
 
-    const position = {
-      lat: parseFloat(denuncia.latitude),
-      lng: parseFloat(denuncia.longitude),
-    };
+    if (markers.length > 0) {
+      denunciasMap.fitBounds(bounds);
+    } else {
+      denunciasMap.setCenter({ lat: -2.5391, lng: -44.2829 }); // Centro padrão
+      denunciasMap.setZoom(12);
+    }
 
-    const marker = new google.maps.Marker({
-      position: position,
-      map: denunciasMap,
-      title: denuncia.tipo,
-      icon: {
-        url:
-          denuncia.status == "Resolvido"
-            ? "https://maps.google.com/mapfiles/ms/icons/green-dot.png"
-            : "https://maps.google.com/mapfiles/ms/icons/red-dot.png",
-      },
-    });
-
-    const infoWindow = new google.maps.InfoWindow({
-      content: `
-        <div style="padding: 0.625rem; max-width: 12.5rem;">
-          <h3 style="margin: 0 0 0.3125rem; color: ${
-            denuncia.status === "Resolvido" ? "#14592a" : "#d93c4a"
-          }; font-size: 1rem;">${denuncia.tipo}</h3>
-          <p style="margin: 0 0 0.3125rem; font-size: 0.875rem;">${
-            denuncia.endereco
-          }</p>
-          <p style="margin: 0; color: #666; font-size: 0.75rem;">Status: ${
-            denuncia.status
-          }</p>
-          <button onclick="visualizarDenuncia('${
-            denuncia.id
-          }')" style="margin-top: 0.3125rem; padding: 0.3125rem 0.625rem; background-color: #c0b40a; border: none; border-radius: 0.3125rem; cursor: pointer; font-size: 0.75rem;">Visualizar</button>
-        </div>
-      `,
-    });
-
-    marker.addListener("click", () => {
-      infoWindow.open(denunciasMap, marker);
-    });
-
-    markers.push(marker);
-
-    bounds.extend(position);
-  });
-
-  if (markers.length > 0) {
-    denunciasMap.fitBounds(bounds);
+  } catch (error) {
+    console.error('Erro no mapa:', error);
+    alert('Erro ao carregar denúncias no mapa');
   }
 }
