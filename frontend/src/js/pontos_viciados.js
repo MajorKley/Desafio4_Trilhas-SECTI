@@ -39,7 +39,11 @@ async function carregarPontosDenuncia() {
 
     for (const denuncia of denuncias) {
       const autor = await axios.get(`${window.APP_CONFIG.API_URL}/api/usuario/buscarNomePorDenunciaId/${denuncia.id_denuncia}`);
-      const fotos = await axios.get(`${window.APP_CONFIG.API_URL}/api/fotos/buscarPorDenuncia/${denuncia.id_denuncia}`);
+      const fotoResponse = await axios.get(`${window.APP_CONFIG.API_URL}/api/fotos/buscarPorDenuncia/${denuncia.id_denuncia}`);
+      const fotosData = fotoResponse.data;
+      const fotos = [];
+      fotos.push(fotosData.foto1, fotosData.foto2, fotosData.foto3)
+
       if (!denuncia.latitude || !denuncia.longitude) continue;
 
       const position = {
@@ -80,9 +84,9 @@ async function carregarPontosDenuncia() {
             ${!denuncia.anonimo ? `<p style="margin: 0 0 5px;"><strong>Autor:</strong> ${autor.data}</p>` : ''}
             <p style="margin: 0 0 5px;"><strong>Local:</strong> ${endereco}</p>
             <p style="margin: 0 0 5px;"><strong>Descrição:</strong> ${denuncia.descricao}</p>
-            ${fotos.data && fotos.data.length > 0 ?
+            ${fotos && fotos.length > 0 ?
               '<div style="margin-top: 10px;">' +
-              fotos.data.map(foto =>
+              fotos.map(foto =>
                   `<img src="data:image/jpeg;base64, ${foto}" style="width: 100%; margin-bottom: 5px;" alt="Foto da denúncia">`
               ).join('') +
               '</div>' : ''}
