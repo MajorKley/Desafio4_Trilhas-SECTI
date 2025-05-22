@@ -41,6 +41,7 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.GET, "/api/usuario/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/fotos/**").permitAll()
                         .requestMatchers(HttpMethod.PUT, "/api/usuario/**").authenticated()
+                        .requestMatchers(HttpMethod.PUT, "/api/denuncia/**").authenticated()
                         .requestMatchers(HttpMethod.POST,"/api/usuario/enviarDenuncia/**").authenticated()
                         .requestMatchers(HttpMethod.POST,"/api/fotos/**").authenticated()
                         .anyRequest().denyAll()
