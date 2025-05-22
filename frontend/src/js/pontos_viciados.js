@@ -38,11 +38,16 @@ async function carregarPontosDenuncia() {
     const denuncias = response.data;
 
     for (const denuncia of denuncias) {
+      let fotos = [];
       const autor = await axios.get(`${window.APP_CONFIG.API_URL}/api/usuario/buscarNomePorDenunciaId/${denuncia.id_denuncia}`);
-      const fotoResponse = await axios.get(`${window.APP_CONFIG.API_URL}/api/fotos/buscarPorDenuncia/${denuncia.id_denuncia}`);
-      const fotosData = fotoResponse.data;
-      const fotos = [];
-      fotos.push(fotosData?.foto1, fotosData?.foto2, fotosData?.foto3)
+
+      try {
+        const fotoResponse = await axios.get(`${window.APP_CONFIG.API_URL}/api/fotos/buscarPorDenuncia/${denuncia.id_denuncia}`);
+        const fotosData = fotoResponse.data || {};
+        fotos = [fotosData.foto1, fotosData.foto2, fotosData.foto3].filter(Boolean);
+      } catch {
+        // Silencia erros de fotos não encontradas
+      }
 
       if (!denuncia.latitude || !denuncia.longitude) continue;
 
