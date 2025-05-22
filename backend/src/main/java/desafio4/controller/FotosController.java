@@ -14,10 +14,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.Base64;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.lang.reflect.Array;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/fotos")
@@ -33,7 +31,15 @@ public class FotosController {
     @PostMapping(value = "{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity salvarFotos(
             @PathVariable UUID id,
-            @RequestParam("fotos") MultipartFile[] fotos) {
+            @RequestPart(value = "foto1", required = false) MultipartFile foto1,
+            @RequestPart(value = "foto2", required = false) MultipartFile foto2,
+            @RequestPart(value = "foto3", required = false) MultipartFile foto3) {
+
+        ArrayList<MultipartFile> fotos = new ArrayList<>();
+        if (foto1 != null) {fotos.add(foto1);}
+        if (foto2 != null) {fotos.add(foto2);}
+        if (foto3 != null) {fotos.add(foto3);}
+
 
         try {
             Denuncia denuncia = denunciaService.buscarPorId(id)
@@ -42,9 +48,9 @@ public class FotosController {
             Fotos fotosEntity = new Fotos();
             fotosEntity.setDenuncia(denuncia);
 
-            if (fotos != null) {
-                for (int i = 0; i < Math.min(fotos.length, 3); i++) {
-                    String base64Foto = Base64.getEncoder().encodeToString(fotos[i].getBytes());
+            if (!fotos.isEmpty()) {
+                for (int i = 0; i < Math.min(fotos.size(), 3); i++) {
+                    String base64Foto = Base64.getEncoder().encodeToString(fotos.get(i).getBytes());
                     switch (i) {
                         case 0: fotosEntity.setFoto1(base64Foto); break;
                         case 1: fotosEntity.setFoto2(base64Foto); break;
