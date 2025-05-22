@@ -33,7 +33,7 @@ public class FotosController {
     @PostMapping(value = "{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity salvarFotos(
             @PathVariable UUID id,
-            @RequestParam(value = "fotos", required = false) MultipartFile[] fotos) {
+            @RequestParam("fotos") MultipartFile[] fotos) {
 
         try {
             Denuncia denuncia = denunciaService.buscarPorId(id)
