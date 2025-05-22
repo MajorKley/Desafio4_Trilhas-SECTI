@@ -245,7 +245,6 @@ function setupForm() {
         for (let i = 0; i < files.length; i++) {
           formDataFotos.append(`foto${i + 1}`, files[i]);
         }
-
         await axios.post(
             `${window.APP_CONFIG.API_URL}/api/fotos/${denunciaId}`,
             formDataFotos,
