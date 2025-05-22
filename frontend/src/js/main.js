@@ -186,7 +186,11 @@ function isLoggedIn() {
 function logout() {
   localStorage.removeItem("ecodenunciaUser");
   alert("Logout realizado com sucesso!");
-  window.location.href = "../src/index.html";
+  if (window.location.href === "../src/index.html") {
+    window.location.href = "../src/index.html";
+  } else {
+    window.location.href = "../index.html";
+  }
 }
 
 function updateLoginStatus() {
