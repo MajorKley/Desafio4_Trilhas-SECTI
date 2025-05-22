@@ -128,3 +128,7 @@ Este projeto foi desenvolvido por *bolsistas do projeto Trilhas – SECTI/MA*, c
 
 Este projeto é de uso educacional e social. Uso livre com atribuição.  
 (c) 2025 – Projeto Trilhas
+
+## Documentação
+
+https://docs.google.com/document/d/15k7eZOefVF7KFrVAGA7A3kOp0sGOUn3Mb3KLTQlTmwU/edit?usp=sharing
