@@ -47,9 +47,12 @@ public class FotosService {
 
     public Optional<Fotos> buscarPorDenuncia(UUID id) {
         Denuncia denuncia = denunciaRepo.findById(id).get();
-        Optional<Fotos> fotos = repo.findFotosByDenuncia(denuncia);
-
-        return fotos;
+        try {
+            Optional<Fotos> fotos = repo.findFotosByDenuncia(denuncia);
+            return fotos;
+        } catch (Exception e) {
+            return Optional.empty();
+        }
     }
 
     @Transactional

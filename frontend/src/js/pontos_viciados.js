@@ -42,7 +42,7 @@ async function carregarPontosDenuncia() {
       const fotoResponse = await axios.get(`${window.APP_CONFIG.API_URL}/api/fotos/buscarPorDenuncia/${denuncia.id_denuncia}`);
       const fotosData = fotoResponse.data;
       const fotos = [];
-      fotos.push(fotosData.foto1, fotosData.foto2, fotosData.foto3)
+      fotos.push(fotosData?.foto1, fotosData?.foto2, fotosData?.foto3)
 
       if (!denuncia.latitude || !denuncia.longitude) continue;
 

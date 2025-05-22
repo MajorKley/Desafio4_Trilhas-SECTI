@@ -344,6 +344,7 @@ async function visualizarDenuncia(id) {
     }
 
     // Obter elementos DENTRO do modal
+    modal.dataset.denunciaId = id;
     const fotoContainer = modal.querySelector('#modal-foto-container');
     let fotosContent = modal.querySelector('.info-value');
 
@@ -476,6 +477,8 @@ window.ampliarFoto = function(imgElement) {
 
 async function alternarStatusDenuncia(id) {
   try {
+
+    const userData = JSON.parse(localStorage.getItem("ecodenunciaUser"));
     // Buscar denúncia atual primeiro
     const response = await axios.get(`${window.APP_CONFIG.API_URL}/api/denuncia/buscarPorId/${id}`);
     const denunciaAtual = response.data;
@@ -485,11 +488,13 @@ async function alternarStatusDenuncia(id) {
     await axios.put(`${window.APP_CONFIG.API_URL}/api/denuncia/${id}`, {
       status: novoStatus
     }, {
-      headers: { 'Content-Type': 'application/json' }
+      headers: {
+        Authorization: `Bearer ${userData.token}`,
+        'Content-Type': 'application/json' }
     });
 
-    carregarDenuncias();
-    if (mapInitialized) carregarDenunciasNoMapa();
+    await carregarDenuncias();
+    if (mapInitialized) await carregarDenunciasNoMapa();
 
   } catch (error) {
     console.error("Erro na alternância:", error.response?.data || error.message);
