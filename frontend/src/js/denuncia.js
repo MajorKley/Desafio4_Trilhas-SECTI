@@ -258,7 +258,59 @@ function setupForm() {
         );
       }
 
-      alert("Denúncia enviada com sucesso!");
+      // 3. Preparar e enviar e-mail
+      const emailData = {
+        to: "weldersonaraujo90@gmail.com", // Destinatário fixo
+        subject: "[DENÚNCIA AMBIENTAL] Descarte irregular de resíduos",
+        content: `
+        <h2>Prezada equipe da Prefeitura</h2>
+        <p>Venho por meio deste registrar uma denúncia referente ao descarte incorreto de resíduos sólidos em áreas inadequadas para descarte.</p>
+        <h3>Descrição do problema:</h3>
+        <p><strong>Tipo:</strong> ${formData.titulo}</p>
+        <p><strong>Descrição:</strong> ${formData.descricao}</p>
+        <p><strong>Localização:</strong> 
+          Latitude: ${formData.latitude}, 
+          Longitude: ${formData.longitude}
+        </p>
+        <p><strong>Endereço:</strong> ${document.getElementById("endereco").value}</p>
+        <h3><strong>Autor:</strong></h3>
+        <p>
+            ${formData.anonimo ? "Anônimo" :
+            `<p><strong>Nome:</strong> ${userData.nome}</p>
+            <p><strong>Email para contato:</strong> ${userData.email}</p>`
+            }
+        </p>
+        <p>Esta mensagem foi gerada por meio da plataforma <strong>EcoDenúncia</strong>, que visa aproximar cidadãos e poder público na luta por um ambiente urbano mais limpo e sustentável.</p>
+        <p>Atenciosamente,</p>
+        <p>EquipeEcoDenúncia</p>
+        <hr>
+        <small>Enviado em: ${new Date().toLocaleString()}</small>
+      `,
+      };
+
+      const formDataEmail = new FormData();
+      formDataEmail.append(
+          "dados",
+          new Blob([JSON.stringify(emailData)], { type: "application/json" }),
+          "dados.json"
+      );
+
+      for (let i = 0; i < files.length; i++) {
+        formDataEmail.append('anexos', files[i]);
+      }
+
+
+      await axios.post(
+          `${window.APP_CONFIG.API_URL}/api/enviar-email`,
+          formDataEmail,
+          {
+            headers: {
+              Authorization: `Bearer ${userData.token}`
+            }
+          }
+      );
+
+      alert("Denúncia enviada e e-mail de notificação enviado com sucesso!");
       window.location.href = "acompanhar.html";
     } catch (error) {
       console.error("Erro:", error);

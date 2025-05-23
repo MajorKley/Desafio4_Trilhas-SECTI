@@ -44,6 +44,7 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.PUT, "/api/denuncia/**").authenticated()
                         .requestMatchers(HttpMethod.POST,"/api/usuario/enviarDenuncia/**").authenticated()
                         .requestMatchers(HttpMethod.POST,"/api/fotos/**").authenticated()
+                        .requestMatchers(HttpMethod.POST,"/api/enviar-email").authenticated()
                         .anyRequest().denyAll()
                 )
                 .sessionManagement(session -> session
