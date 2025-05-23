@@ -155,7 +155,7 @@ public class UsuarioService implements UserDetailsService {
         List<SimpleGrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority("ROLE_USUARIO"));
 
-        return new UsuarioDTO(recuperado.getId_usuario(), recuperado.getEmail(), recuperado.getSenha(), authorities);
+        return new UsuarioDTO(recuperado.getNome(), recuperado.getId_usuario(), recuperado.getEmail(), recuperado.getSenha(), authorities);
     }
 
 }

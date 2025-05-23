@@ -56,6 +56,7 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
         // Obtém as roles do usuário
         UsuarioDTO usuario = (UsuarioDTO) authResult.getPrincipal();
         String id = usuario.getId().toString();
+        String nome = usuario.getUsername();
         String email = usuario.getEmail();
         String role = usuario.getAuthorities().stream()
                 .findFirst()
@@ -64,6 +65,7 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
         String token = Jwts.builder()
                 .setSubject(id)
+                .claim("nome", nome)
                 .claim("email", email)
                 .claim("role", role)
                 .claim("id", id)
@@ -75,8 +77,9 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
         String jsonResponse = String.format(
-                "{\"token\": \"%s\", \"user\": {\"email\": \"%s\", \"role\": \"%s\", \"id\": \"%s\"}}",
+                "{\"token\": \"%s\", \"user\": {\"nome\": \"%s\", \"email\": \"%s\", \"role\": \"%s\", \"id\": \"%s\"}}",
                 token,
+                nome,
                 email,
                 role,
                 id

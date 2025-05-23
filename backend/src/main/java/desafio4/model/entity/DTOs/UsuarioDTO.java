@@ -27,7 +27,8 @@ public class UsuarioDTO implements UserDetails {
     private String descricao;
     private Collection<? extends GrantedAuthority> authorities;
 
-    public UsuarioDTO(UUID id, String login, String senha, List<SimpleGrantedAuthority> authorities) {
+    public UsuarioDTO(String nome, UUID id, String login, String senha, List<SimpleGrantedAuthority> authorities) {
+        this.nome = nome;
         this.id = id;
         this.email = login;
         this.senha = senha;
