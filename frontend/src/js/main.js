@@ -105,6 +105,7 @@ function setupLoginForms() {
 
       // Armazenar token e dados do usuário
       localStorage.setItem("ecodenunciaUser", JSON.stringify({
+        nome: userData.nome,
         email: userData.email,
         role: userData.role,
         loggedIn: true,
@@ -186,8 +187,9 @@ function isLoggedIn() {
 function logout() {
   localStorage.removeItem("ecodenunciaUser");
   alert("Logout realizado com sucesso!");
-  if (window.location.href === "../src/index.html") {
-    window.location.href = "../src/index.html";
+  const paginaAtual = window.location.href;
+  if (paginaAtual.endsWith("index.html")) {
+    window.location.href = "index.html";
   } else {
     window.location.href = "../index.html";
   }
