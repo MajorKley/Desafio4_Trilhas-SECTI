@@ -91,6 +91,10 @@ O descarte incorreto de resíduos sólidos em áreas urbanas gera sérios impact
 
    # JWT
    JWT_SECRET_KEY (Use um gerador de chaves Base 64)
+
+   # MAIL
+   MAIL_USERNAME (use um gmail que tenha acesso a app menos seguros ativado)
+   MAIL_PASSWORD
    ```
    
    #### Para o backend:
